@@ -1,0 +1,64 @@
+<ci:SettingsPageBase 
+    x:Class="EntertainingIsland.Views.SettingsPages.MySettingsPage"
+    x:Name="RootPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+    xmlns:local="clr-namespace:EntertainingIsland.Views.SettingsPages"
+    mc:Ignorable="d" 
+    d:DesignHeight="900" d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance local:MySettingsPage}">
+
+    <ScrollViewer>
+        <StackPanel Classes="settings-container animated-intro">
+
+            <ci:IconText Glyph="&#xEF27;" Text="基本设置" Margin="0 0 0 4" />
+
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE9E4;}"
+                                 Header="显示欢迎消息"
+                                 Description="应用启动时在控制台输出欢迎信息。">
+                <fa:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.ShowWelcomeMessage}" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE671;}"
+                                 Header="全局安全键"
+                                 Description="{Binding Settings.DismissHotkey.DisplayString, StringFormat='当前：{0} — 按下后消警并隐藏/显示所有娱乐组件'}"
+                                 IsExpanded="False">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+                    <TextBlock Text="紧急情况下按下此快捷键，可立即关闭警报并隐藏所有娱乐组件。再按一次恢复显示。"
+                               FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CheckBox IsChecked="{Binding Settings.DismissHotkey.Ctrl}" Content="Ctrl" />
+                        <CheckBox IsChecked="{Binding Settings.DismissHotkey.Shift}" Content="Shift" />
+                        <CheckBox IsChecked="{Binding Settings.DismissHotkey.Alt}" Content="Alt" />
+                        <CheckBox IsChecked="{Binding Settings.DismissHotkey.Win}" Content="Win" />
+                    </StackPanel>
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="主按键" FontSize="12" Opacity="0.7" />
+                        <ComboBox SelectedItem="{Binding Settings.DismissHotkey.Key}"
+                                  Width="120"
+                                  ItemsSource="{Binding KeyOptions}" />
+                    </StackPanel>
+                </StackPanel>
+            </fa:SettingsExpander>
+
+            <Separator Margin="0 12 0 4" />
+            <ci:IconText Glyph="&#xE946;" Text="插件信息" Margin="0 0 0 4" />
+
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE946;}"
+                                 Header="关于 EntertainingIsland">
+                <TextBlock Text="{Binding PluginInfoText}" 
+                           Opacity="0.7"
+                           TextWrapping="Wrap"
+                           Margin="0,8,0,0" />
+            </fa:SettingsExpander>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</ci:SettingsPageBase>

@@ -1,0 +1,47 @@
+<Window
+    x:Class="EntertainingIsland.Views.LuckyPickerWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    mc:Ignorable="d"
+    d:DesignHeight="48" d:DesignWidth="48"
+    Width="48" Height="48"
+    CanResize="False"
+    Topmost="True"
+    ShowInTaskbar="False"
+    SystemDecorations="None"
+    Background="Transparent"
+    TransparencyLevelHint="Transparent"
+    WindowStartupLocation="Manual">
+
+    <Border x:Name="RootPanel"
+            Width="48" Height="48"
+            Background="#CC1A1A2E"
+            CornerRadius="10"
+            BorderBrush="#33FFFFFF"
+            BorderThickness="1">
+        <Button x:Name="PickButton"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="Transparent"
+                BorderThickness="0"
+                CornerRadius="10"
+                Cursor="Hand"
+                Click="PickButton_Click">
+            <Button.ContextFlyout>
+                <MenuFlyout Placement="RightEdgeAlignedTop">
+                    <MenuItem Header="抽一人" Click="PickOne_Click" />
+                    <MenuItem Header="抽两人" Click="PickTwo_Click" />
+                </MenuFlyout>
+            </Button.ContextFlyout>
+            <ci:IconText Glyph="&#xe716;"
+                           FontSize="20"
+                           Foreground="White"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center" />
+        </Button>
+    </Border>
+
+</Window>

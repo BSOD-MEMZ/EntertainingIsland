@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>EntertainingIsland</RootNamespace>
+    <AssemblyName>EntertainingIsland</AssemblyName>
+    <!-- 禁用自动生成 AssemblyInfo -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- 复制清单和图标到输出目录 -->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 插件 SDK 核心库 -->
+    <PackageReference Include="ClassIsland.PluginSdk" Version="2.0.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 确保清单文件和图标被复制到输出目录 -->
+    <None Update="manifest.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="README.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

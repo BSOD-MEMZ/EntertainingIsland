@@ -1,0 +1,63 @@
+<ci:ComponentBase
+    x:Class="EntertainingIsland.Views.Components.LuckyPickerComponent"
+    x:TypeArguments="models:LuckyPickerSettings"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:models="clr-namespace:EntertainingIsland.Models"
+    mc:Ignorable="d"
+    d:DesignHeight="40" d:DesignWidth="300">
+
+    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+
+        <!-- 小巧圆角正方形图标按钮 -->
+        <Button x:Name="PickButton"
+                Width="36" Height="36"
+                CornerRadius="8"
+                Padding="0"
+                Cursor="Hand"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <Button.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
+                    <Setter Property="BorderThickness" Value="1.5" />
+                </Style>
+                <Style Selector="Button:pointerover /template/ ContentPresenter">
+                    <Setter Property="Background" Value="{DynamicResource SystemAccentColor}" />
+                </Style>
+            </Button.Styles>
+            <Button.Flyout>
+                <MenuFlyout Placement="RightEdgeAlignedTop">
+                    <MenuItem Header="抽一人" Click="PickOne_Click">
+                        <MenuItem.Icon>
+                            <ci:IconText Glyph="&#xe716;" FontSize="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="抽两人" Click="PickTwo_Click">
+                        <MenuItem.Icon>
+                            <ci:IconText Glyph="&#xe716;" FontSize="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuFlyout>
+            </Button.Flyout>
+            <ci:IconText Glyph="&#xe716;"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center" />
+        </Button>
+
+        <!-- 抽取结果显示在一行 -->
+        <TextBlock x:Name="ResultText"
+                   Text=""
+                   FontSize="{DynamicResource MainWindowBodyFontSize}"
+                   FontWeight="SemiBold"
+                   VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis" />
+
+    </StackPanel>
+
+</ci:ComponentBase>

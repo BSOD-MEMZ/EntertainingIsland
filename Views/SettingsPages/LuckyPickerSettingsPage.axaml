@@ -1,0 +1,106 @@
+<ci:SettingsPageBase 
+    x:Class="EntertainingIsland.Views.SettingsPages.LuckyPickerSettingsPage"
+    x:Name="RootPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+    xmlns:local="clr-namespace:EntertainingIsland.Views.SettingsPages"
+    mc:Ignorable="d" 
+    d:DesignHeight="900" d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance local:LuckyPickerSettingsPage}">
+
+    <ScrollViewer>
+        <StackPanel Classes="settings-container animated-intro">
+
+            <ci:IconText Glyph="&#xE716;" Text="点名器" Margin="0 0 0 4" />
+
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEDE9;}"
+                                 Header="启用点名器"
+                                 Description="在屏幕上显示点名浮窗。">
+                <fa:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.LuckyPicker.IsEnabled}" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE3E4;}"
+                                 Header="名单"
+                                 Description="每行输入一个姓名，或从 txt 文件导入。"
+                                 IsExpanded="True">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button x:Name="ImportBtn" Content="从文件导入" />
+                        <TextBlock Text="支持 .txt 文件，每行一个姓名"
+                                   FontSize="12" Opacity="0.5" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBox x:Name="NameListBox"
+                             Text="{Binding Settings.LuckyPicker.NameListText, UpdateSourceTrigger=PropertyChanged}"
+                             Watermark="每行一个姓名，如：张三、李四、王五..."
+                             AcceptsReturn="True"
+                             MinHeight="120"
+                             TextWrapping="Wrap" />
+                    <TextBlock x:Name="NameCountLabel"
+                               FontSize="12" Opacity="0.6" />
+                </StackPanel>
+            </fa:SettingsExpander>
+
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF35D;}"
+                                 Header="通知显示时长"
+                                 Description="点名结果通知在屏幕上显示的秒数。">
+                <fa:SettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Slider Value="{Binding Settings.LuckyPicker.NotificationDurationSeconds}"
+                                Minimum="1" Maximum="15"
+                                Width="120" />
+                        <TextBlock Text="{Binding Settings.LuckyPicker.NotificationDurationSeconds, StringFormat='{}{0} 秒'}"
+                                   Width="40" />
+                    </StackPanel>
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF263;}"
+                                 Header="按钮文字"
+                                 Description="点名按钮上显示的文字。">
+                <fa:SettingsExpander.Footer>
+                    <TextBox Text="{Binding Settings.LuckyPicker.ButtonText, UpdateSourceTrigger=PropertyChanged}"
+                             Width="150" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
+            <!-- ===== 隐藏爆率面板（Ctrl+Shift+Alt+C 打开） ===== -->
+            <Border x:Name="RiggedPanel"
+                    IsVisible="False"
+                    Margin="0,16,0,0"
+                    Padding="12"
+                    CornerRadius="8"
+                    BorderBrush="{DynamicResource SystemAccentColor}"
+                    BorderThickness="1">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="权重设置"
+                               FontSize="16" FontWeight="Bold" />
+                    <TextBlock Text="设置每位同学的权重和保底次数。权重 1.0 为正常值，&gt;1.0 更容易被抽中，&lt;1.0 更难被抽中。保底为 0 表示不启用保底。"
+                               FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+
+                <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEDE9;}"
+                                     Header="启用权重模式"
+                                     Description="开启后使用自定义权重进行点名。">
+                    <fa:SettingsExpander.Footer>
+                        <ToggleSwitch IsChecked="{Binding Settings.LuckyPicker.RiggedModeEnabled}" />
+                    </fa:SettingsExpander.Footer>
+                </fa:SettingsExpander>
+                    <!-- 爆率列表（代码动态生成） -->
+                    <ScrollViewer MaxHeight="400">
+                        <StackPanel x:Name="RiggedListPanel" Spacing="4" />
+                    </ScrollViewer>
+
+                    <TextBlock Text="名单变更后权重列表会自动更新。"
+                               FontSize="11" Opacity="0.4" Margin="0,8,0,0" />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</ci:SettingsPageBase>

@@ -1,0 +1,18 @@
+<ci:ComponentBase
+    x:Class="EntertainingIsland.Views.Components.CatchphraseComponent"
+    x:TypeArguments="models:CatchphraseComponentSettings"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:models="clr-namespace:EntertainingIsland.Models"
+    mc:Ignorable="d"
+    d:DesignHeight="50" d:DesignWidth="400">
+
+    <TextBlock x:Name="CatchphraseLabel"
+               VerticalAlignment="Center"
+               TextWrapping="Wrap"
+               Text="暂无口头禅记录" />
+
+</ci:ComponentBase>

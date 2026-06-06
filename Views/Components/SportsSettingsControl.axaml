@@ -1,0 +1,131 @@
+<ci:ComponentBase x:TypeArguments="models:SportsSettings"
+    x:Class="EntertainingIsland.Views.Components.SportsSettingsControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    xmlns:models="clr-namespace:EntertainingIsland.Models"
+    xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+    xmlns:local="clr-namespace:EntertainingIsland.Views.Components"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="450">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Classes="settings-container animated-intro">
+
+            <!-- API 局限性提醒 -->
+            <fa:InfoBar IsOpen="True"
+                        IsClosable="False"
+                        Severity="Warning"
+                        Title="注意"
+                        Message="我个人完全不了解体育赛事且不感兴趣，无法保证数据准确性。赛事数据来自 TheSportsDB 免费 API（Key=3），存在以下限制：每日请求次数有限（约 100 次）；数据可能不是实时更新；部分联赛/比赛的详细信息可能不完整。若需稳定数据源，可在下方填入自定义 API 地址。" />
+
+            <ci:IconText Glyph="&#xE7A5;" Text="赛事数据" Margin="0 0 0 4" />
+
+            <fa:SettingsExpander Header="联赛"
+                                 Description="选择一个联赛，自动从 TheSportsDB 获取数据。">
+                <fa:SettingsExpander.Footer>
+                    <ComboBox x:Name="LeagueCombo"
+                              Width="140" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
+            <fa:SettingsExpander Header="自定义 URL"
+                                 Description="留空则使用上方的联赛选择。填入 URL 则覆盖联赛选择。">
+                <fa:SettingsExpander.Footer>
+                    <TextBox Text="{Binding Settings.DataSourceUrl, UpdateSourceTrigger=PropertyChanged}"
+                             Watermark="https://example.com/api/matches"
+                             Width="280" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
+            <fa:SettingsExpander Header="自动刷新"
+                                 Description="每隔多少分钟重新拉取一次（0=不刷新）。">
+                <fa:SettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Slider Value="{Binding Settings.AutoRefreshMinutes}"
+                                Minimum="0" Maximum="60"
+                                Width="120" />
+                        <TextBlock Text="{Binding Settings.AutoRefreshMinutes, StringFormat='{}{0} 分'}"
+                                   Width="40" />
+                    </StackPanel>
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
+            <fa:SettingsExpander Header="手动数据"
+                                 Description="网络不可用时使用的后备数据。"
+                                 IsExpanded="False">
+                <TextBox Text="{Binding Settings.MatchDataText, UpdateSourceTrigger=PropertyChanged}"
+                         Watermark="湖人 108:102 勇士 NBA 10:30 进行中"
+                         AcceptsReturn="True"
+                         MinHeight="80"
+                         TextWrapping="Wrap" />
+            </fa:SettingsExpander>
+
+            <Separator Margin="0 12 0 4" />
+            <ci:IconText Glyph="&#xE7A5;" Text="显示设置" Margin="0 0 0 4" />
+
+            <fa:SettingsExpander Header="轮播间隔"
+                                 Description="每场比赛显示的秒数。">
+                <fa:SettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Slider Value="{Binding Settings.FlipIntervalSeconds}"
+                                Minimum="2" Maximum="60"
+                                Width="120" />
+                        <TextBlock Text="{Binding Settings.FlipIntervalSeconds, StringFormat='{}{0} 秒'}"
+                                   Width="40" />
+                    </StackPanel>
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
+            <fa:SettingsExpander Header="默认详细模式"
+                                 Description="开启后显示完整赛事信息，关闭则只显示比分。">
+                <fa:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.DetailedMode}" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
+            <Separator Margin="0 12 0 4" />
+            <ci:IconText Glyph="&#xEA0B;" Text="快捷键" Margin="0 0 0 4" />
+
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEA0B;}"
+                                 Header="快捷键"
+                                 Description="设置翻页和模式切换快捷键。"
+                                 IsExpanded="False">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+
+                    <TextBlock Text="上翻" FontSize="12" Opacity="0.7" />
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Ctrl}" Content="Ctrl" />
+                        <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Shift}" Content="Shift" />
+                        <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Alt}" Content="Alt" />
+                    </StackPanel>
+                    <ComboBox SelectedItem="{Binding Settings.PageUpHotkey.Key}"
+                              ItemsSource="{Binding KeyOptions}" Width="120" />
+
+                    <TextBlock Text="下翻" FontSize="12" Opacity="0.7" Margin="0,8,0,0" />
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Ctrl}" Content="Ctrl" />
+                        <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Shift}" Content="Shift" />
+                        <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Alt}" Content="Alt" />
+                    </StackPanel>
+                    <ComboBox SelectedItem="{Binding Settings.PageDownHotkey.Key}"
+                              ItemsSource="{Binding KeyOptions}" Width="120" />
+
+                    <TextBlock Text="切换详细/简洁模式" FontSize="12" Opacity="0.7" Margin="0,8,0,0" />
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <CheckBox IsChecked="{Binding Settings.ToggleModeHotkey.Ctrl}" Content="Ctrl" />
+                        <CheckBox IsChecked="{Binding Settings.ToggleModeHotkey.Shift}" Content="Shift" />
+                        <CheckBox IsChecked="{Binding Settings.ToggleModeHotkey.Alt}" Content="Alt" />
+                    </StackPanel>
+                    <ComboBox SelectedItem="{Binding Settings.ToggleModeHotkey.Key}"
+                              ItemsSource="{Binding KeyOptions}" Width="120" />
+
+                </StackPanel>
+            </fa:SettingsExpander>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</ci:ComponentBase>

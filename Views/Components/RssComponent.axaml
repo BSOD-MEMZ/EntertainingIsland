@@ -1,0 +1,28 @@
+<ci:ComponentBase
+    x:Class="EntertainingIsland.Views.Components.RssComponent"
+    x:TypeArguments="models:RssComponentSettings"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:models="clr-namespace:EntertainingIsland.Models"
+    mc:Ignorable="d"
+    d:DesignHeight="40" d:DesignWidth="400">
+
+    <Border Padding="8,4" CornerRadius="6"
+            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+        <StackPanel Spacing="2" x:Name="RootPanel" VerticalAlignment="Center">
+            <TransitioningContentControl x:Name="TitleContent">
+                <TransitioningContentControl.PageTransition>
+                    <PageSlide Duration="0:0:0.3" Orientation="Horizontal" />
+                </TransitioningContentControl.PageTransition>
+            </TransitioningContentControl>
+            <TextBlock x:Name="SourceLabel"
+                       FontSize="10"
+                       Opacity="0.4"
+                       Text="" />
+        </StackPanel>
+    </Border>
+
+</ci:ComponentBase>

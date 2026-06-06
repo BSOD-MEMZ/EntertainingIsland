@@ -1,0 +1,21 @@
+<ci:ComponentBase x:TypeArguments="models:LuckyPickerSettings"
+    x:Class="EntertainingIsland.Views.Components.LuckyPickerSettingsControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    xmlns:models="clr-namespace:EntertainingIsland.Models"
+    mc:Ignorable="d"
+    d:DesignHeight="200" d:DesignWidth="400">
+
+    <StackPanel Spacing="12" Margin="16">
+        <TextBlock Text="🎲 公平点名器"
+                   FontSize="18" FontWeight="Bold" />
+        <TextBlock Text="点名器配置请前往 ClassIsland 设置 → 🎲 公平点名器 进行设置。"
+                   FontSize="13" Opacity="0.7" TextWrapping="Wrap" />
+        <TextBlock Text="提示：在设置页面按下 Ctrl+Shift+Alt+C 可以访问更多选项。"
+                   FontSize="11" Opacity="0.4" />
+    </StackPanel>
+
+</ci:ComponentBase>
