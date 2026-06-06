@@ -3,27 +3,19 @@ bin/
 obj/
 out/
 out2/
-*.pdb
 
-# ===== IDE / 编辑器 =====
+# ===== IDE =====
 .vs/
 .vscode/
-.idea/
-.claude/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
 *.DotSettings
-*.swp
-*~
 
 # ===== NuGet =====
 *.nupkg
 **/packages/*
-project.assets.json
-*.nuget.g.props
-*.nuget.g.targets
 
 # ===== 日志 =====
 Logs/
@@ -34,17 +26,7 @@ Logs/
 *.temp
 ~$*
 Thumbs.db
-*.cache
 
 # ===== 操作系统 =====
 .DS_Store
 Desktop.ini
-ehthumbs.db
-[Tt]humbs.db
-
-# ===== Python 临时脚本 =====
-find_icons.py
-map_icons.py
-check_icons.py
-__pycache__/
-*.pyc
