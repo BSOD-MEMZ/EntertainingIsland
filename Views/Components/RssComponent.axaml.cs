@@ -17,7 +17,7 @@ using EntertainingIsland.Services;
 namespace EntertainingIsland.Views.Components;
 
 [ComponentInfo(
-    "BBCDEEFF-2222-3333-4444-555566667777",
+    "80963B55-EC03-46B6-AAC2-CC928A035A22",
     "RSS 新闻",
     "\uEEAD",
     "显示 RSS 新闻标题，支持自定义源、快捷键翻页和打开链接"

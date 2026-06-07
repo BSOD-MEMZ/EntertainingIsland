@@ -22,7 +22,7 @@ using EntertainingIsland.Services;
 namespace EntertainingIsland.Views.Components;
 
 [ComponentInfo(
-    "F1E2D3C4-B5A6-9780-1234-567890ABCDEF",
+    "E38F72BC-EFE6-495E-9730-316281C9E151",
     "头像课程表",
     "\uECE5",
     "以教师头像展示课程表，支持自定义头像图片、圆角、透明度等效果。"

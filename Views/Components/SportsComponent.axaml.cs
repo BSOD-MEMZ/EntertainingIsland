@@ -13,7 +13,7 @@ using EntertainingIsland.Services;
 namespace EntertainingIsland.Views.Components;
 
 [ComponentInfo(
-    "E5F6A7B8-C9D0-1234-5678-90ABCDEF1234",
+    "CE50F0A5-A312-466F-8EE4-58EB21A7987A",
     "体育赛事",
     "\uE7A5",
     "显示体育比赛比分与排名，支持详细/简洁两种模式。"

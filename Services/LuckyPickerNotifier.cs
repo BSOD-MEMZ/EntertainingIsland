@@ -11,7 +11,7 @@ namespace EntertainingIsland.Services;
 /// 点名器通知提供者——用于在点名后显示 ClassIsland 原生通知。
 /// </summary>
 [NotificationProviderInfo(
-    "E1F2A3B4-C5D6-7890-1234-567890ABCDEF",
+    "E9D052E7-3E15-4827-9B6A-92021ADFA4E0",
     "点名器通知",
     "\uE716",
     "在点名后显示通知，展示被选中的同学姓名。"
