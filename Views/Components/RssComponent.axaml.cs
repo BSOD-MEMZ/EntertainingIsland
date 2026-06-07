@@ -7,12 +7,10 @@ using System.Xml.Linq;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
-using Avalonia.Win32;
 using ClassIsland.Core;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Shared;
-using EntertainingIsland.Helpers;
 using EntertainingIsland.Models;
 using EntertainingIsland.Services;
 
@@ -34,13 +32,10 @@ public partial class RssComponent : ComponentBase<RssComponentSettings>
 
     // 全局热键
     private static RssComponent? _activeInstance;
-    private const int WM_HOTKEY = 0x0312;
     private const int HK_RSS_PAGEUP = 8010;
     private const int HK_RSS_PAGEDOWN = 8011;
     private const int HK_RSS_OPEN = 8012;
-    private bool _hotkeysRegistered;
-    private bool _hooked;
-    private System.Timers.Timer? _hotkeyRetry;
+    private HotkeyManager? _hotkeys;
 
     private record RssItem(string Title, string Url);
 
@@ -87,32 +82,40 @@ public partial class RssComponent : ComponentBase<RssComponentSettings>
                 or nameof(RssComponentSettings.PageDownHotkey)
                 or nameof(RssComponentSettings.OpenHotkey))
             {
-                Dispatcher.UIThread.Post(() => { UnregisterHotkeys(); TryRegisterHotkeys(); });
+                _hotkeys?.Refresh();
             }
         };
 
-        Settings.PageUpHotkey.PropertyChanged += (_, _) => Dispatcher.UIThread.Post(() => { UnregisterHotkeys(); TryRegisterHotkeys(); });
-        Settings.PageDownHotkey.PropertyChanged += (_, _) => Dispatcher.UIThread.Post(() => { UnregisterHotkeys(); TryRegisterHotkeys(); });
-        Settings.OpenHotkey.PropertyChanged += (_, _) => Dispatcher.UIThread.Post(() => { UnregisterHotkeys(); TryRegisterHotkeys(); });
+        Settings.PageUpHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
+        Settings.PageDownHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
+        Settings.OpenHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
 
-        // 启动热键重试定时器（窗口句柄未就绪时自动重试）
-        _hotkeyRetry = new System.Timers.Timer(2000);
-        _hotkeyRetry.Elapsed += (_, _) => Dispatcher.UIThread.Post(TryRegisterHotkeys);
-        _hotkeyRetry.AutoReset = true;
-        _hotkeyRetry.Start();
-
-        Dispatcher.UIThread.Post(TryRegisterHotkeys);
+        // 热键管理器
+        _hotkeys = new HotkeyManager(OnHotkey);
+        _hotkeys.Add(HK_RSS_PAGEUP, Settings.PageUpHotkey);
+        _hotkeys.Add(HK_RSS_PAGEDOWN, Settings.PageDownHotkey);
+        _hotkeys.Add(HK_RSS_OPEN, Settings.OpenHotkey);
+        _hotkeys.Start();
     }
 
     protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
     {
-        UnregisterHotkeys();
-        _hotkeyRetry?.Stop();
-        _hotkeyRetry?.Dispose();
-        _hotkeyRetry = null;
+        _hotkeys?.Dispose();
+        _hotkeys = null;
         if (_activeInstance == this) _activeInstance = null;
         _flipTimer?.Stop(); _flipTimer?.Dispose(); _flipTimer = null;
         base.OnDetachedFromVisualTree(e);
+    }
+
+    private void OnHotkey(int id)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (_activeInstance == null) return;
+            if (id == HK_RSS_PAGEUP) _activeInstance.Flip(-1);
+            else if (id == HK_RSS_PAGEDOWN) _activeInstance.Flip(+1);
+            else if (id == HK_RSS_OPEN) _activeInstance.OpenCurrentUrl();
+        });
     }
 
     private async void LoadFeed()
@@ -214,67 +217,4 @@ public partial class RssComponent : ComponentBase<RssComponentSettings>
         TitleContent.Content = new TextBlock { Text = msg, FontSize = 13, Opacity = 0.6 };
         SourceLabel.Text = "";
     }
-
-    // ===== 热键 =====
-    private void TryRegisterHotkeys()
-    {
-        if (_hotkeysRegistered) { _hotkeyRetry?.Stop(); return; }
-        var w = AppBase.Current.MainWindow ?? AppBase.Current.GetRootWindow();
-        if (w == null) return;
-        var ph = w.TryGetPlatformHandle();
-        if (ph == null) return;
-        var hwnd = ph.Handle;
-
-        var hkUp = Settings.PageUpHotkey ?? new() { Ctrl = true, Key = "Left" };
-        var hkDown = Settings.PageDownHotkey ?? new() { Ctrl = true, Key = "Right" };
-        var hkOpen = Settings.OpenHotkey ?? new() { Ctrl = true, Shift = true, Key = "O" };
-
-        bool anyOk = false;
-        if (NativeMethods.RegisterHotKey(hwnd, HK_RSS_PAGEUP, hkUp.GetModifiers(), HotkeyHelper.VkFromKey(hkUp.Key)))
-            anyOk = true;
-        if (NativeMethods.RegisterHotKey(hwnd, HK_RSS_PAGEDOWN, hkDown.GetModifiers(), HotkeyHelper.VkFromKey(hkDown.Key)))
-            anyOk = true;
-        if (NativeMethods.RegisterHotKey(hwnd, HK_RSS_OPEN, hkOpen.GetModifiers(), HotkeyHelper.VkFromKey(hkOpen.Key)))
-            anyOk = true;
-
-        if (anyOk)
-        {
-            _hotkeysRegistered = true;
-            _hotkeyRetry?.Stop();
-            if (!_hooked)
-            {
-                _hooked = true;
-                Win32Properties.AddWndProcHookCallback(w, WndProc);
-            }
-        }
-    }
-
-    private void UnregisterHotkeys()
-    {
-        var w = AppBase.Current.MainWindow ?? AppBase.Current.GetRootWindow();
-        var ph = w?.TryGetPlatformHandle();
-        if (ph != null)
-        {
-            NativeMethods.UnregisterHotKey(ph.Handle, HK_RSS_PAGEUP);
-            NativeMethods.UnregisterHotKey(ph.Handle, HK_RSS_PAGEDOWN);
-            NativeMethods.UnregisterHotKey(ph.Handle, HK_RSS_OPEN);
-        }
-        _hotkeysRegistered = false;
-    }
-
-    private IntPtr WndProc(IntPtr h, uint msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-    {
-        if (msg != WM_HOTKEY) return IntPtr.Zero;
-        int id = wParam.ToInt32();
-        Dispatcher.UIThread.Post(() =>
-        {
-            if (_activeInstance == null) return;
-            if (id == HK_RSS_PAGEUP) _activeInstance.Flip(-1);
-            else if (id == HK_RSS_PAGEDOWN) _activeInstance.Flip(+1);
-            else if (id == HK_RSS_OPEN) _activeInstance.OpenCurrentUrl();
-        });
-        handled = true;
-        return IntPtr.Zero;
-    }
-
 }

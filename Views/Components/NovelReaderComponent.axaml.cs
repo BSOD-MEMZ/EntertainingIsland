@@ -3,12 +3,10 @@ using System.IO;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
-using Avalonia.Win32;
 using ClassIsland.Core;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Shared;
-using EntertainingIsland.Helpers;
 using EntertainingIsland.Models;
 using EntertainingIsland.Services;
 
@@ -29,14 +27,11 @@ public partial class NovelReaderComponent : ComponentBase<NovelReaderSettings>
 
     // 全局热键翻页 + 暂停
     private static NovelReaderComponent? _activeInstance;
-    private const int WM_HOTKEY = 0x0312;
     private const int HK_PAGEUP = 8001;
     private const int HK_PAGEDOWN = 8002;
     private const int HK_PAUSE = 8003;
-    private bool _hotkeysRegistered;
-    private bool _hooked;
     private bool _isPaused;
-    private System.Timers.Timer? _hotkeyRetry;
+    private HotkeyManager? _hotkeys;
 
     public NovelReaderComponent()
     {
@@ -106,38 +101,46 @@ public partial class NovelReaderComponent : ComponentBase<NovelReaderSettings>
                 or nameof(NovelReaderSettings.PageDownHotkey)
                 or nameof(NovelReaderSettings.PauseHotkey))
             {
-                Dispatcher.UIThread.Post(() => { UnregisterHotkeys(); TryRegisterHotkeys(); });
+                _hotkeys?.Refresh();
             }
         };
 
-        // 热键子属性变更也要重新注册
-        Settings.PageUpHotkey.PropertyChanged += (_, _) => Dispatcher.UIThread.Post(() => { UnregisterHotkeys(); TryRegisterHotkeys(); });
-        Settings.PageDownHotkey.PropertyChanged += (_, _) => Dispatcher.UIThread.Post(() => { UnregisterHotkeys(); TryRegisterHotkeys(); });
-        Settings.PauseHotkey.PropertyChanged += (_, _) => Dispatcher.UIThread.Post(() => { UnregisterHotkeys(); TryRegisterHotkeys(); });
+        Settings.PageUpHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
+        Settings.PageDownHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
+        Settings.PauseHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
 
         // 点击组件切换暂停
         RootPanel.PointerPressed += (_, _) => { TogglePause(); };
 
-        // 启动热键重试定时器
-        _hotkeyRetry = new System.Timers.Timer(2000);
-        _hotkeyRetry.Elapsed += (_, _) => Dispatcher.UIThread.Post(TryRegisterHotkeys);
-        _hotkeyRetry.AutoReset = true;
-        _hotkeyRetry.Start();
+        // 热键管理器
+        _hotkeys = new HotkeyManager(OnHotkey);
+        _hotkeys.Add(HK_PAGEUP, Settings.PageUpHotkey);
+        _hotkeys.Add(HK_PAGEDOWN, Settings.PageDownHotkey);
+        _hotkeys.Add(HK_PAUSE, Settings.PauseHotkey);
+        _hotkeys.Start();
 
-        Dispatcher.UIThread.Post(TryRegisterHotkeys);
         UpdateDisplay();
     }
 
     protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
     {
         SaveProgress();
-        UnregisterHotkeys();
-        _hotkeyRetry?.Stop();
-        _hotkeyRetry?.Dispose();
-        _hotkeyRetry = null;
+        _hotkeys?.Dispose();
+        _hotkeys = null;
         if (_activeInstance == this) _activeInstance = null;
         _flipTimer?.Stop(); _flipTimer?.Dispose(); _flipTimer = null;
         base.OnDetachedFromVisualTree(e);
+    }
+
+    private void OnHotkey(int id)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (_activeInstance == null) return;
+            if (id == HK_PAGEUP) _activeInstance.FlipPage(-1);
+            else if (id == HK_PAGEDOWN) _activeInstance.FlipPage(+1);
+            else if (id == HK_PAUSE) _activeInstance.TogglePause();
+        });
     }
 
     private void LoadNovel(string path)
@@ -201,68 +204,6 @@ public partial class NovelReaderComponent : ComponentBase<NovelReaderSettings>
         };
         var total = Math.Max(1, (int)Math.Ceiling((double)_flatText.Length / cpp));
         PageInfo.Text = $"第 {Math.Min(_currentCharIndex / cpp + 1, total)}/{total} 页  ·  {(int)(_currentCharIndex * 100.0 / _flatText.Length)}%{(_isPaused ? "  ⏸" : "")}";
-    }
-
-    // ===== 热键 =====
-    private void TryRegisterHotkeys()
-    {
-        if (_hotkeysRegistered) { _hotkeyRetry?.Stop(); return; }
-        var w = AppBase.Current.MainWindow ?? AppBase.Current.GetRootWindow();
-        if (w == null) return;
-        var ph = w.TryGetPlatformHandle();
-        if (ph == null) return;
-
-        var hwnd = ph.Handle;
-        var hkUp = Settings.PageUpHotkey;
-        var hkDown = Settings.PageDownHotkey;
-        var hkPause = Settings.PauseHotkey;
-
-        bool anyOk = false;
-        if (NativeMethods.RegisterHotKey(hwnd, HK_PAGEUP, hkUp.GetModifiers(), HotkeyHelper.VkFromKey(hkUp.Key)))
-            anyOk = true;
-        if (NativeMethods.RegisterHotKey(hwnd, HK_PAGEDOWN, hkDown.GetModifiers(), HotkeyHelper.VkFromKey(hkDown.Key)))
-            anyOk = true;
-        if (NativeMethods.RegisterHotKey(hwnd, HK_PAUSE, hkPause.GetModifiers(), HotkeyHelper.VkFromKey(hkPause.Key)))
-            anyOk = true;
-
-        if (anyOk)
-        {
-            _hotkeysRegistered = true;
-            _hotkeyRetry?.Stop();
-            if (!_hooked)
-            {
-                _hooked = true;
-                Win32Properties.AddWndProcHookCallback(w, WndProc);
-            }
-        }
-    }
-
-    private void UnregisterHotkeys()
-    {
-        var w = AppBase.Current.MainWindow ?? AppBase.Current.GetRootWindow();
-        var ph = w?.TryGetPlatformHandle();
-        if (ph != null)
-        {
-            NativeMethods.UnregisterHotKey(ph.Handle, HK_PAGEUP);
-            NativeMethods.UnregisterHotKey(ph.Handle, HK_PAGEDOWN);
-            NativeMethods.UnregisterHotKey(ph.Handle, HK_PAUSE);
-        }
-        _hotkeysRegistered = false;
-    }
-
-    private IntPtr WndProc(IntPtr h, uint msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-    {
-        if (msg != WM_HOTKEY) return IntPtr.Zero;
-        int id = wParam.ToInt32();
-        Dispatcher.UIThread.Post(() =>
-        {
-            if (_activeInstance == null) return;
-            if (id == HK_PAGEUP) _activeInstance.FlipPage(-1);
-            else if (id == HK_PAGEDOWN) _activeInstance.FlipPage(+1);
-            else if (id == HK_PAUSE) _activeInstance.TogglePause();
-        });
-        handled = true;
-        return IntPtr.Zero;
     }
 
     // ===== 进度保存/恢复 =====
