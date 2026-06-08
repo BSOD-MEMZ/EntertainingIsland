@@ -51,7 +51,7 @@
 - 语音播报 / 强调效果 / 显示教师名称
 - 设置入口：ClassIsland 设置 → **提醒** → 下课倒计时提醒
 
-![防巡堂警报](docs/AeroShot 8.png)
+![下课倒计时提醒](docs/AeroShot 8.png)
 
 ## 小说阅读器
 
@@ -62,7 +62,7 @@
 - `Ctrl+Shift+↑/↓` 翻页 · `Ctrl+Shift+Space` 暂停/继续
 - 自动保存阅读进度
 
-![防巡堂警报](docs/AeroShot 9.png)
+![小说阅读器](docs/AeroShot 9.png)
 
 ## 口头禅记录
 
@@ -71,7 +71,7 @@
 - 完全自定义口头禅文字和快捷键
 - 每日自动清零
 
-![防巡堂警报](docs/AeroShot 2.png)
+![口头禅记录](docs/AeroShot 2.png)
 
 ## RSS 新闻
 
@@ -81,7 +81,7 @@
 - `Ctrl+Shift+O` 打开当前链接
 - 内置一些中文源
 
-![防巡堂警报](docs/AeroShot 4.png)
+![RSS新闻](docs/AeroShot 4.png)
 
 ## 头像课程表
 
@@ -92,7 +92,7 @@
 - 当前课程放大 + 入场动画
   **警告：不建议为真人老师头像使用最低饱和度（黑白）效果**
 
-![防巡堂警报](docs/AeroShot 7.png)
+![头像课程表](docs/AeroShot 7.png)
 
 ## 可作弊点名器
 
@@ -101,7 +101,7 @@
 - 支持 txt 导入名单
 - 隐藏爆率面板：`Ctrl+Shift+Alt+C`（加权 + 保底）
 
-![防巡堂警报](docs/AeroShot 5.png)
+![可作弊点名器](docs/AeroShot 5.png)
 
 ## 体育赛事
 
@@ -111,7 +111,7 @@
 - 详细 / 简洁两种显示模式
 - `Ctrl+Shift+M` 切换显示模式
 
-![防巡堂警报](docs/AeroShot 3.png)
+![体育赛事](docs/AeroShot 3.png)
 
 ## 全局安全键
 
@@ -175,7 +175,6 @@ dotnet build -c Release
 - `icon.png` — 插件图标
 - `EntertainingIsland.dll` — 主程序集
 - `EntertainingIsland.deps.json` — 依赖清单
-- `LibVLCSharp.dll` / `LibVLCSharp.Avalonia.dll` — VLC 依赖
 - `runtimes/` — .NET 运行时文件
 - `README.md` — 说明文档（可选）
 

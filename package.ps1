@@ -65,6 +65,15 @@ if (-not (Test-Path "$publishDir\icon.png")) {
     Copy-Item "$pluginProject\icon.png" $publishDir -Force
 }
 
+# 4b. 复制 docs 文件夹
+$docsSource = "$pluginProject\docs"
+if (Test-Path $docsSource) {
+    Write-Host "`n📁 复制 docs 文件夹..." -ForegroundColor Yellow
+    $docsDest = "$publishDir\docs"
+    Copy-Item $docsSource $docsDest -Recurse -Force
+    Write-Host "  ✅ docs\" -ForegroundColor Gray
+}
+
 # 5. 打包为 zip
 Write-Host "`n📦 创建插件包..." -ForegroundColor Yellow
 if (Test-Path $zipFile) {
