@@ -27,6 +27,10 @@ public partial class LuckyPickerSettings : ObservableObject
     [ObservableProperty]
     private bool _showLastPicked = true;
 
+    /// <summary>是否显示持久化二级提醒。开启后先弹出强调提示，再显示持续 N 秒的完整提醒。</summary>
+    [ObservableProperty]
+    private bool _showPersistentOverlay = true;
+
     /// <summary>最近被点中的人（内部使用，不持久化到设置）</summary>
     [ObservableProperty]
     private string _lastPickedName = "";

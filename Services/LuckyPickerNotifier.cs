@@ -21,14 +21,18 @@ public class LuckyPickerNotifier : NotificationProviderBase
     /// <summary>
     /// 显示点名结果通知
     /// </summary>
-    public void ShowPickResult(string name, int durationSeconds)
+    /// <param name="name">被选中的人名或系统消息</param>
+    /// <param name="durationSeconds">二级提醒持续秒数</param>
+    /// <param name="showOverlay">是否显示持久化二级提醒</param>
+    public void ShowPickResult(string name, int durationSeconds, bool showOverlay = true)
     {
-        var dur = TimeSpan.FromSeconds(Math.Max(1, durationSeconds));
-
-        // 系统消息（如"名单为空"）用简单格式
+        // 系统消息（如"名单为空"）始终用简单格式，无视 showOverlay
         var isSystemMsg = name.StartsWith("(");
         var title = isSystemMsg ? name : $"{name} 被选中";
         var detail = isSystemMsg ? name : $"{name}";
+
+        // 强调提示（Mask）：始终显示，短时闪出
+        var emphasisDuration = TimeSpan.FromSeconds(2);
 
         try
         {
@@ -37,15 +41,20 @@ public class LuckyPickerNotifier : NotificationProviderBase
                 rightIcon: "\ue9e4",
                 factory: x =>
                 {
-                    x.Duration = dur;
+                    x.Duration = emphasisDuration;
                 });
 
-            var overlayContent = NotificationContent.CreateSimpleTextContent(
-                detail,
-                factory: x =>
-                {
-                    x.Duration = dur;
-                });
+            NotificationContent? overlayContent = null;
+            if (showOverlay || isSystemMsg)
+            {
+                var dur = TimeSpan.FromSeconds(Math.Max(1, durationSeconds));
+                overlayContent = NotificationContent.CreateSimpleTextContent(
+                    detail,
+                    factory: x =>
+                    {
+                        x.Duration = dur;
+                    });
+            }
 
             var request = new NotificationRequest
             {

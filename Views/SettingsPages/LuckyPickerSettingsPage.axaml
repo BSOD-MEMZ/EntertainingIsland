@@ -60,6 +60,14 @@
                 </fa:SettingsExpander.Footer>
             </fa:SettingsExpander>
 
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE91B;}"
+                                 Header="持久化二级提醒"
+                                 Description="关闭则只弹出强调提示。">
+                <fa:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.LuckyPicker.ShowPersistentOverlay}" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF263;}"
                                  Header="按钮文字"
                                  Description="点名按钮上显示的文字。">

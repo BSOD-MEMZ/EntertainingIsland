@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Avalonia.Controls;
@@ -15,6 +14,10 @@ public partial class ClassEndingNotificationControl : UserControl, INotifyProper
     private string _message = "";
     private int _slideIndex;
     private bool _showTeacherName;
+    private string _nextSubjectName = "";
+    private string _nextSubjectTeacherName = "";
+    private TimeSpan _nextClassStartTime;
+    private TimeSpan _nextClassEndTime;
 
     public object? Element
     {
@@ -58,6 +61,34 @@ public partial class ClassEndingNotificationControl : UserControl, INotifyProper
             _showTeacherName = value;
             OnPropertyChanged();
         }
+    }
+
+    /// <summary>下节课名称（由 ClassEndingReminderService 计算后设置）</summary>
+    public string NextSubjectName
+    {
+        get => _nextSubjectName;
+        set { if (value == _nextSubjectName) return; _nextSubjectName = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>下节课教师名</summary>
+    public string NextSubjectTeacherName
+    {
+        get => _nextSubjectTeacherName;
+        set { if (value == _nextSubjectTeacherName) return; _nextSubjectTeacherName = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>下节课开始时间</summary>
+    public TimeSpan NextClassStartTime
+    {
+        get => _nextClassStartTime;
+        set { if (value == _nextClassStartTime) return; _nextClassStartTime = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>下节课结束时间</summary>
+    public TimeSpan NextClassEndTime
+    {
+        get => _nextClassEndTime;
+        set { if (value == _nextClassEndTime) return; _nextClassEndTime = value; OnPropertyChanged(); }
     }
 
     public ILessonsService LessonsService { get; } = IAppHost.GetService<ILessonsService>();

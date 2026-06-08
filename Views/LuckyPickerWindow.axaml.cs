@@ -2,6 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using ClassIsland.Core;
 using ClassIsland.Shared;
@@ -19,8 +20,10 @@ public partial class LuckyPickerWindow : Window
     private LuckyPickerService? _service;
     private LuckyPickerNotifier? _notifier;
     private LuckyPickerSettings? _settings;
-    private Point _dragStartPos;
+    private PixelPoint _dragStartScreenPos;
+    private PixelPoint _dragStartWindowPos;
     private bool _isDragging;
+    private bool _dragStarted;
 
     public LuckyPickerWindow()
     {
@@ -37,10 +40,10 @@ public partial class LuckyPickerWindow : Window
             );
         }
 
-        // 拖拽事件
-        RootPanel.PointerPressed += OnPointerPressed;
-        RootPanel.PointerMoved += OnPointerMoved;
-        RootPanel.PointerReleased += OnPointerReleased;
+        // 在 PickButton 上监听拖拽（覆盖整个窗口，触摸屏也能响应）
+        PickButton.AddHandler(InputElement.PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel, true);
+        PickButton.AddHandler(InputElement.PointerMovedEvent, OnPointerMoved, RoutingStrategies.Tunnel, true);
+        PickButton.AddHandler(InputElement.PointerReleasedEvent, OnPointerReleased, RoutingStrategies.Tunnel, true);
     }
 
     public void Initialize(LuckyPickerSettings settings, LuckyPickerService service, LuckyPickerNotifier? notifier)
@@ -59,26 +62,24 @@ public partial class LuckyPickerWindow : Window
             };
     }
 
-    private void PickButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void PickButton_Click(object? sender, RoutedEventArgs e)
     {
-        if (_isDragging) return;
-        if (sender is Control ctrl)
-            ctrl.ContextFlyout?.ShowAt(ctrl);
+        if (_isDragging || _dragStarted) return;
+        PickButton.ContextFlyout?.ShowAt(PickButton);
     }
 
-    private void PickOne_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void PickOne_Click(object? sender, RoutedEventArgs e)
     {
         DoPick(() => _service!.Pick());
     }
 
-    private void PickTwo_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void PickTwo_Click(object? sender, RoutedEventArgs e)
     {
         DoPick(() => _service!.PickTwo());
     }
 
     private void DoPick(Func<string> pickFunc)
     {
-        if (_isDragging) return;
         if (_service == null || _settings == null) return;
 
         var name = pickFunc();
@@ -94,42 +95,57 @@ public partial class LuckyPickerWindow : Window
         _settings.LastPickedName = name;
 
         // 发送 ClassIsland 通知
-        _notifier?.ShowPickResult(name, _settings.NotificationDurationSeconds);
+        _notifier?.ShowPickResult(name, _settings.NotificationDurationSeconds,
+            showOverlay: _settings.ShowPersistentOverlay);
     }
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        _dragStartPos = e.GetPosition(this);
+        var pt = e.GetPosition(this);
+        _dragStartScreenPos = new PixelPoint(
+            Position.X + (int)pt.X,
+            Position.Y + (int)pt.Y);
+        _dragStartWindowPos = Position;
         _isDragging = false;
+        _dragStarted = false;
     }
 
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
         if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed) return;
 
-        var current = e.GetPosition(this);
-        var dx = Math.Abs(current.X - _dragStartPos.X);
-        var dy = Math.Abs(current.Y - _dragStartPos.Y);
+        var pt = e.GetPosition(this);
+        var screenX = Position.X + (int)pt.X;
+        var screenY = Position.Y + (int)pt.Y;
 
-        if (!_isDragging && (dx > 3 || dy > 3))
-            _isDragging = true;
+        var dx = Math.Abs(screenX - _dragStartScreenPos.X);
+        var dy = Math.Abs(screenY - _dragStartScreenPos.Y);
 
-        if (_isDragging)
+        // 触摸屏需要更大阈值防止误触
+        if (!_dragStarted && !_isDragging && (dx > 5 || dy > 5))
+            _dragStarted = true;
+
+        if (_dragStarted)
         {
+            _isDragging = true;
             Position = new PixelPoint(
-                Position.X + (int)(current.X - _dragStartPos.X),
-                Position.Y + (int)(current.Y - _dragStartPos.Y)
-            );
+                _dragStartWindowPos.X + (screenX - _dragStartScreenPos.X),
+                _dragStartWindowPos.Y + (screenY - _dragStartScreenPos.Y));
         }
     }
 
     private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
-        var wasDragging = _isDragging;
-        _isDragging = false;
-        if (wasDragging)
+        if (_isDragging)
         {
+            // 发生了拖拽，阻止按钮点击
+            _isDragging = false;
+            _dragStarted = false;
             e.Handled = true;
+        }
+        else
+        {
+            _dragStarted = false;
         }
     }
 }

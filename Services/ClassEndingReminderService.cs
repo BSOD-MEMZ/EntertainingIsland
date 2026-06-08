@@ -84,6 +84,57 @@ public class ClassEndingReminderService : NotificationProviderBase<ClassEndingRe
             DateOnly.FromDateTime(DateTime.Now),
             TimeOnly.FromTimeSpan(_lessonsService!.CurrentTimeLayoutItem.EndTime));
 
+        // === 找到真正的下节课（跳过课间休息） ===
+        var plan = _lessonsService.CurrentClassPlan;
+        var items = plan?.ValidTimeLayoutItems;
+        var nowItem = _lessonsService.CurrentTimeLayoutItem;
+        var profileService = IAppHost.TryGetService<IProfileService>();
+        var subjectMap = profileService?.Profile?.Subjects ?? new();
+
+        string nextName = "";
+        string nextTeacher = "";
+        TimeSpan nextStart = TimeSpan.Zero;
+        TimeSpan nextEnd = TimeSpan.Zero;
+
+        if (items != null && nowItem != null)
+        {
+            // 构建 Class.Classes 的时间→科目查找表
+            var classSubjectMap = new Dictionary<(TimeSpan, TimeSpan), Guid>();
+            if (plan?.Classes != null)
+            {
+                foreach (var c in plan.Classes.Where(c => c.IsEnabled))
+                {
+                    var item = c.CurrentTimeLayoutItem;
+                    classSubjectMap[(item.StartTime, item.EndTime)] = c.SubjectId;
+                }
+            }
+
+            // 找到当前项的索引
+            int currentIdx = -1;
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i].StartTime == nowItem.StartTime && items[i].EndTime == nowItem.EndTime)
+                { currentIdx = i; break; }
+            }
+
+            // 从下一项开始，找第一个有科目的（即为下节课）
+            for (int i = currentIdx + 1; i < items.Count; i++)
+            {
+                var key = (items[i].StartTime, items[i].EndTime);
+                var subjectId = classSubjectMap.TryGetValue(key, out var cid)
+                    ? cid : items[i].DefaultClassId;
+
+                if (subjectId != Guid.Empty && subjectMap.TryGetValue(subjectId, out var subject))
+                {
+                    nextName = subject.Name;
+                    nextTeacher = subject.GetFirstName();
+                    nextStart = items[i].StartTime;
+                    nextEnd = items[i].EndTime;
+                    break;
+                }
+            }
+        }
+
         // === Mask: 仿 ClassIsland CreateTwoIconsMask ===
         var maskContent = NotificationContent.CreateTwoIconsMask(
             maskText,
@@ -114,16 +165,20 @@ public class ClassEndingReminderService : NotificationProviderBase<ClassEndingRe
         var overlayControl = new ClassEndingNotificationControl
         {
             Message = message,
-            ShowTeacherName = Settings.ShowTeacherName
+            ShowTeacherName = Settings.ShowTeacherName,
+            NextSubjectName = nextName,
+            NextSubjectTeacherName = nextTeacher,
+            NextClassStartTime = nextStart,
+            NextClassEndTime = nextEnd
         };
 
         var overlayContent = new NotificationContent(overlayControl)
         {
             EndTime = classEndTime,
             SpeechContent = Settings.EnableSpeech
-                ? $"{message} 下节课是：{_lessonsService.NextClassSubject.Name}" +
-                  (Settings.ShowTeacherName
-                      ? $"，由{_lessonsService.NextClassSubject.GetFirstName()}老师任教"
+                ? $"{message} 下节课是：{nextName}" +
+                  (Settings.ShowTeacherName && !string.IsNullOrEmpty(nextTeacher)
+                      ? $"，由{nextTeacher}老师任教"
                       : "") + "。"
                 : "",
             IsSpeechEnabled = Settings.EnableSpeech
