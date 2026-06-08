@@ -59,6 +59,14 @@
                 </StackPanel>
             </fa:SettingsExpander>
 
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE91B;}"
+                                 Header="口头禅强调提醒"
+                                 Description="老师每说一次口头禅，弹出 1 秒强调提醒。">
+                <fa:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding PluginSettings.CatchphraseEmphasisEnabled}" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
+
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE74D;}"
                                  Header="清空统计"
                                  Description="清除所有口头禅计数记录。">

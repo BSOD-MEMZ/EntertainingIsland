@@ -14,6 +14,9 @@ public partial class CatchphraseComponentSettingsControl : ComponentBase<Catchph
     public ObservableCollection<CatchphrasePreset> GlobalPresets =>
         IAppHost.GetService<Plugin>().Settings.CatchphrasePresets;
 
+    /// <summary>主插件设置（用于绑定全局开关）</summary>
+    public Settings PluginSettings => IAppHost.GetService<Plugin>().Settings;
+
     public static List<string> KeyOptions { get; } = new()
     {
         "A","B","C","D","E","F","G","H","I","J","K","L","M",

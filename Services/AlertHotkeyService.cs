@@ -155,6 +155,12 @@ public class AlertHotkeyService : NotificationProviderBase<AlertHotkeySettings>
                     var phrase = _pluginSettings.CatchphrasePresets[idx].Phrase;
                     _catchphraseStore?.Add(phrase);
                     Logger.Info($"口头禅 +1: \"{phrase}\"");
+
+                    // 口头禅强调提醒
+                    if (_pluginSettings.CatchphraseEmphasisEnabled)
+                    {
+                        ShowCatchphraseEmphasis(phrase);
+                    }
                 }
             }
         }
@@ -238,6 +244,39 @@ public class AlertHotkeyService : NotificationProviderBase<AlertHotkeySettings>
         try { _currentRequest.Cancel(); }
         catch (Exception ex) { Logger.Error($"消警异常: {ex.Message}"); }
         _currentRequest = null;
+    }
+
+    /// <summary>口头禅强调提醒 — 1 秒短暂强调</summary>
+    private void ShowCatchphraseEmphasis(string phrase)
+    {
+        try
+        {
+            var content = NotificationContent.CreateTwoIconsMask(
+                $"{phrase}",
+                rightIcon: "\uE3E4",
+                factory: x =>
+                {
+                    x.Duration = TimeSpan.FromSeconds(1);
+                });
+
+            var request = new NotificationRequest
+            {
+                MaskContent = content,
+                RequestNotificationSettings = new Ns.NotificationSettings
+                {
+                    IsSettingsEnabled = false,
+                    IsNotificationEnabled = true,
+                    IsNotificationEffectEnabled = true,
+                    IsNotificationTopmostEnabled = true
+                }
+            };
+
+            ShowNotification(request);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"[口头禅提醒] 发送失败: {ex.Message}");
+        }
     }
 
 }

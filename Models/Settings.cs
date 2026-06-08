@@ -27,6 +27,10 @@ public partial class Settings : ObservableObject
     [ObservableProperty]
     private bool _catchphraseClearOnNewDay = true;
 
+    /// <summary>老师每说一次口头禅，弹出 1 秒强调提醒</summary>
+    [ObservableProperty]
+    private bool _catchphraseEmphasisEnabled;
+
     // ===== 公平点名器 =====
 
     [ObservableProperty]
