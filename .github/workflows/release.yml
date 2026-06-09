@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags:
+      # 仅匹配 ClassIsland 商店要求的 a.b.c.d 格式（如 1.1.0.5）
+      - '[0-9]+.[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: 📥 检出代码
+        uses: actions/checkout@v4
+
+      - name: ⚙ 设置 .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 📦 打包插件
+        shell: pwsh
+        run: .\package.ps1 -Ci
+        working-directory: MyPlugin
+
+      - name: � 读取 Release 说明
+        id: release_body
+        shell: pwsh
+        run: |
+          $body = Get-Content MyPlugin/out/release-body.md -Raw -Encoding UTF8
+          # GitHub Actions 输出变量（多行文本用此写法）
+          "body<<EOF" >> $env:GITHUB_OUTPUT
+          $body >> $env:GITHUB_OUTPUT
+          "EOF" >> $env:GITHUB_OUTPUT
+
+      - name: 🚀 创建 GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: MyPlugin/out/entertainingisland.app.cipx
+          body: ${{ steps.release_body.outputs.body }}
+          fail_on_unmatched_files: true
