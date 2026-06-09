@@ -24,14 +24,15 @@ jobs:
 
       - name: 📦 打包插件
         shell: pwsh
-        run: .\package.ps1 -Ci
-        working-directory: ${{ github.workspace }}\MyPlugin
+        run: |
+          Set-Location "$env:GITHUB_WORKSPACE\MyPlugin"
+          .\package.ps1 -Ci
 
       - name: � 读取 Release 说明
         id: release_body
         shell: pwsh
         run: |
-          $body = Get-Content ${{ github.workspace }}\MyPlugin\out\release-body.md -Raw -Encoding UTF8
+          $body = Get-Content "$env:GITHUB_WORKSPACE\MyPlugin\out\release-body.md" -Raw -Encoding UTF8
           "body<<EOF" >> $env:GITHUB_OUTPUT
           $body >> $env:GITHUB_OUTPUT
           "EOF" >> $env:GITHUB_OUTPUT
@@ -39,6 +40,6 @@ jobs:
       - name: 🚀 创建 GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ github.workspace }}\MyPlugin\out\entertainingisland.app.cipx
+          files: MyPlugin/out/entertainingisland.app.cipx
           body: ${{ steps.release_body.outputs.body }}
           fail_on_unmatched_files: true
