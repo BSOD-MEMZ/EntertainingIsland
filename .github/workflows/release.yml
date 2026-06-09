@@ -18,7 +18,7 @@ jobs:
       - name: 📝 读取 Release 说明
         id: body
         run: |
-          BODY=$(cat MyPlugin/out/release-body.md)
+          BODY=$(cat out/release-body.md)
           # 多行输出
           echo "body<<EOF" >> $GITHUB_OUTPUT
           echo "$BODY" >> $GITHUB_OUTPUT
@@ -27,6 +27,6 @@ jobs:
       - name: 🚀 创建 GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: MyPlugin/out/entertainingisland.app.cipx
+          files: out/entertainingisland.app.cipx
           body: ${{ steps.body.outputs.body }}
           fail_on_unmatched_files: true
