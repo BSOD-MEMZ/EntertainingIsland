@@ -1,6 +1,10 @@
 # ClassIsland 插件打包脚本
-# 用法: .\package.ps1
+# 用法:
+#   本地打包:         .\package.ps1
+#   CI 自动发布:       .\package.ps1 -Ci
 # 输出: .\out\entertainingisland.app.zip
+
+param([switch]$Ci)
 
 $ErrorActionPreference = 'Stop'
 
@@ -8,7 +12,8 @@ $pluginProject = $PSScriptRoot
 $pluginId = "entertainingisland.app"
 $outDir = "$pluginProject\out"
 $publishDir = "$outDir\publish"
-$zipFile = "$outDir\$pluginId.zip"
+$pkgFile = "$outDir\$pluginId.cipx"
+$releaseBodyFile = "$outDir\release-body.md"
 
 Write-Host "=== ClassIsland 插件打包脚本 ===" -ForegroundColor Cyan
 
@@ -74,34 +79,66 @@ if (Test-Path $docsSource) {
     Write-Host "  ✅ docs\" -ForegroundColor Gray
 }
 
-# 5. 打包为 zip
+# 5. 打包为 cipx (ClassIsland 插件包格式，实质是 zip)
 Write-Host "`n📦 创建插件包..." -ForegroundColor Yellow
-if (Test-Path $zipFile) {
-    Remove-Item $zipFile -Force
+if (Test-Path $pkgFile) {
+    Remove-Item $pkgFile -Force
 }
 
-# 进入 publish 目录打包，使 zip 内结构为根目录即为插件文件
+# 进入 publish 目录打包，使包内结构为根目录即为插件文件
 Push-Location $publishDir
 try {
-    Compress-Archive -Path * -DestinationPath $zipFile -Force
+    Compress-Archive -Path * -DestinationPath $pkgFile -Force
 } finally {
     Pop-Location
 }
 
-# 6. 输出信息
+# 6. 计算 MD5
+Write-Host "`n🔐 计算 MD5..." -ForegroundColor Yellow
+$md5 = (Get-FileHash $pkgFile -Algorithm MD5).Hash.ToLower()
+$pkgFileName = Split-Path $pkgFile -Leaf
+Write-Host "  MD5: $md5" -ForegroundColor Gray
+
+# 7. 生成 Release 说明（含 ClassIsland 商店要求的 MD5 标记）
+#    -CI 模式：仅 MD5，Release Notes 由 release.ps1 或 Actions 拼接
+#    本地模式：含占位符，方便手动编辑
+if ($Ci) {
+    $releaseBody = "<!-- CLASSISLAND_PKG_MD5 {`"$pkgFileName`": `"$md5`"} -->`n"
+}
+else {
+    $releaseBody = @"
+> ℹ 在此处填写 Release Notes（本行可删除），下方 MD5 标记请勿修改。
+
+<!-- CLASSISLAND_PKG_MD5 {"$pkgFileName": "$md5"} -->
+"@
+}
+$releaseBody | Set-Content $releaseBodyFile -Encoding UTF8
+Write-Host "  📝 Release 说明已生成: $releaseBodyFile" -ForegroundColor Gray
+
+# 8. 输出信息
 Write-Host "`n✅ 打包完成！" -ForegroundColor Green
 Write-Host ""
-Write-Host "📦 输出文件: $zipFile" -ForegroundColor Cyan
-$zipSize = (Get-Item $zipFile).Length
-Write-Host "📏 文件大小: $([math]::Round($zipSize / 1KB, 1)) KB" -ForegroundColor Cyan
+Write-Host "📦 输出文件: $pkgFile" -ForegroundColor Cyan
+$pkgSize = (Get-Item $pkgFile).Length
+Write-Host "📏 文件大小: $([math]::Round($pkgSize / 1KB, 1)) KB" -ForegroundColor Cyan
+Write-Host "🔐 MD5: $md5" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "📋 包含文件:" -ForegroundColor Yellow
 Add-Type -AssemblyName System.IO.Compression.FileSystem
-$zip = [System.IO.Compression.ZipFile]::OpenRead($zipFile)
+$zip = [System.IO.Compression.ZipFile]::OpenRead($pkgFile)
 foreach ($entry in $zip.Entries | Sort-Object Name) {
     $sizeText = if ($entry.Length -gt 1KB) { "$([math]::Round($entry.Length / 1KB, 1)) KB" } else { "$($entry.Length) B" }
     Write-Host "  $($entry.FullName)  ($sizeText)" -ForegroundColor Gray
 }
 $zip.Dispose()
 Write-Host ""
-Write-Host "将此 .zip 文件上传到 ClassIsland 插件市场即可。" -ForegroundColor Green
+
+if ($Ci) {
+    Write-Host "🤖 CI 模式：cipx 已就绪，交由 GitHub Actions 发布 Release。" -ForegroundColor Cyan
+}
+else {
+    Write-Host "将此 .cipx 文件上传到 ClassIsland 插件市场即可。" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "💡 提示：推送版本 tag 可触发 GitHub Actions 自动发布 Release。" -ForegroundColor DarkGray
+    Write-Host "   git tag 1.1.0.5 && git push origin 1.1.0.5" -ForegroundColor DarkGray
+}

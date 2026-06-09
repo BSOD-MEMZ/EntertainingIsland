@@ -1,0 +1,32 @@
+<ci:ComponentBase
+    x:Class="EntertainingIsland.Views.Components.CameraStatusComponent"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:ci="http://classisland.tech/schemas/xaml/core"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    mc:Ignorable="d"
+    d:DesignHeight="28" d:DesignWidth="72">
+
+    <StackPanel x:Name="Root"
+                Orientation="Horizontal"
+                Spacing="8"
+                VerticalAlignment="Center"
+                Margin="4,0">
+
+        <!-- 摄像头指示器（仅绿色小圆点） -->
+        <Grid x:Name="CameraIndicator" IsVisible="False">
+            <Ellipse x:Name="CameraDot"
+                     Fill="#FF4CAF50"
+                     Width="24" Height="24"
+                     HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <ci:FluentIcon x:Name="CameraIcon"
+                           Glyph="&#xE392;"
+                           Foreground="White"
+                           FontSize="13"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+
+    </StackPanel>
+
+</ci:ComponentBase>

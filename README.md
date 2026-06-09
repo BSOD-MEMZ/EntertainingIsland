@@ -113,6 +113,14 @@
 
 <img src="docs/AeroShot%203.png" alt="体育赛事" style="zoom:33%;" />
 
+## 摄像头安全指示器
+
+防止老师调用一体机前置摄像头视奸学生。
+
+- 在主界面创建安卓风格的小绿点，不会太明显
+
+<img src="docs/AeroShot%2010.png" alt="摄像头安全指示器" style="zoom:33%;" />
+
 ## 全局安全键
 
 当遇到紧急情况，立即按下：`Ctrl+Shift+K`

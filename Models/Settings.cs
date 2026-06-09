@@ -31,6 +31,11 @@ public partial class Settings : ObservableObject
     [ObservableProperty]
     private bool _catchphraseEmphasisEnabled;
 
+    // ===== 摄像头安全检测 =====
+
+    [ObservableProperty]
+    private CameraMonitorSettings _cameraMonitor = new();
+
     // ===== 公平点名器 =====
 
     [ObservableProperty]

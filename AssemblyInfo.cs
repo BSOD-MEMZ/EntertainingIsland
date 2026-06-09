@@ -1,8 +1,8 @@
 using System.Reflection;
 
 [assembly: AssemblyTitle("EntertainingIsland")]
-[assembly: AssemblyDescription("一个 ClassIsland 示例插件")]
-[assembly: AssemblyCompany("MyCompany")]
+[assembly: AssemblyDescription("让 ClassIsland 更好玩的插件")]
+[assembly: AssemblyCompany("xxtsoft")]
 [assembly: AssemblyProduct("EntertainingIsland")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.5")]
+[assembly: AssemblyFileVersion("1.1.0.5")]

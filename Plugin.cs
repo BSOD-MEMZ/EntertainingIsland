@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using EntertainingIsland.Models;
 using EntertainingIsland.Services;
 using EntertainingIsland.Services.Automation;
+using EntertainingIsland.Services.Automation.Triggers;
 using EntertainingIsland.Views;
 using EntertainingIsland.Views.Components;
 using EntertainingIsland.Views.NotificationProviders;
@@ -43,6 +44,7 @@ public class Plugin : PluginBase
 
         // 确保新增的嵌套设置对象不为 null（兼容旧版配置文件）
         Settings.LuckyPicker ??= new();
+        Settings.CameraMonitor ??= new();
 
         // 当设置发生变化时自动保存
         Settings.PropertyChanged += (sender, args) =>
@@ -89,6 +91,12 @@ public class Plugin : PluginBase
         // 6d. 注册体育赛事组件（带设置面板）
         services.AddComponent<SportsComponent, SportsSettingsControl>();
 
+        // 6e. 注册摄像头安全检测服务（单例）
+        services.AddSingleton<CameraMonitorService>();
+
+        // 6f. 注册摄像头安全指示器组件
+        services.AddComponent<CameraStatusComponent>();
+
         // 6d. 注册点名器通知提供程序
         services.AddNotificationProvider<LuckyPickerNotifier>();
         // 额外注册为自身类型，以便 TryGetService 能解析（AddNotificationProvider 只注册为 IHostedService）
@@ -114,6 +122,15 @@ public class Plugin : PluginBase
 
         // 口头禅
         services.AddAction<CatchphraseClearAction>();
+
+        // 摄像头监控 Actions
+        services.AddAction<ToggleCameraMonitorAction>();
+        services.AddAction<EnableCameraMonitorAction>();
+        services.AddAction<DisableCameraMonitorAction>();
+
+        // 摄像头监控 Triggers（"当事件触发时"）
+        services.AddTrigger<CameraInUseTrigger>();
+        services.AddTrigger<CameraStoppedTrigger>();
 
         // 8. 注册设置页面
         services.AddSettingsPage<MySettingsPage>();
@@ -160,7 +177,19 @@ public class Plugin : PluginBase
                 Console.WriteLine($"[EntertainingIsland] 点名器浮窗创建失败: {ex.Message}");
             }
 
-            // 7c. 输出欢迎信息
+            // 7c. 初始化摄像头监控服务
+            try
+            {
+                var cameraService = IAppHost.TryGetService<CameraMonitorService>();
+                cameraService?.Initialize(Settings.CameraMonitor);
+                Console.WriteLine($"[EntertainingIsland] 摄像头监控已启动 (启用: {Settings.CameraMonitor.EnableCameraMonitor})");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[EntertainingIsland] 摄像头监控初始化失败: {ex.Message}");
+            }
+
+            // 7d. 输出欢迎信息
             if (Settings.ShowWelcomeMessage)
             {
                 Console.WriteLine($"[EntertainingIsland] 欢迎使用 {Info.Manifest.Name}！");
