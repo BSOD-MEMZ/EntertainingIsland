@@ -12,6 +12,8 @@ $pluginProject = $PSScriptRoot
 $outDir = "$pluginProject\out"
 $notesFile = "$outDir\release-notes.md"
 $bodyFile = "$outDir\release-body.md"
+$manifestPath = "$pluginProject\manifest.yml"
+$manifest = if (Test-Path $manifestPath) { Get-Content $manifestPath -Raw } else { '' }
 
 Write-Host "=== EntertainingIsland 发布向导 ===" -ForegroundColor Cyan
 
@@ -49,16 +51,11 @@ if (-not $SkipEditor) {
 - 
 "@
     # 尝试从 manifest.yml 读取版本号
-    $manifestPath = "$pluginProject\manifest.yml"
-    if (Test-Path $manifestPath) {
-        $manifest = Get-Content $manifestPath -Raw
-        # 用 (?m)^version: 精确匹配 version 行，避开 apiVersion
-        if ($manifest -match '(?m)^version:\s*([0-9.]+)') {
-            $initialContent = $initialContent -replace '\{version\}', $Matches[1]
-        }
-        else {
-            $initialContent = $initialContent -replace '\{version\}', '?.?.?.?'
-        }
+    if ($manifest -match '(?m)^version:\s*([0-9.]+)') {
+        $initialContent = $initialContent -replace '\{version\}', $Matches[1]
+    }
+    else {
+        $initialContent = $initialContent -replace '\{version\}', '?.?.?.?'
     }
 
     if (-not (Test-Path $notesFile)) {
@@ -134,8 +131,23 @@ Write-Host "`n✅ 发布准备完成！" -ForegroundColor Green
 Write-Host ""
 Write-Host "📝 Release 说明: $bodyFile" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "🚀 下一步: 推送 tag 触发自动发布" -ForegroundColor Yellow
-Write-Host "   git tag 1.1.0.5"
-Write-Host "   git push origin master --tags"
+
+# 7. 自动将产物加入 Git 提交
+$tagVersion = if ($manifest -match '(?m)^version:\s*([0-9.]+)') { $Matches[1] } else { '?.?.?.?' }
+
+Write-Host "📤 将产物加入 Git..." -ForegroundColor Yellow
+Set-Location $pluginProject
+git add out/ 2>$null
+$hasChanges = git status --porcelain out/
+if ($hasChanges) {
+    git commit -m "发布 v$tagVersion 产物"
+    Write-Host "✅ 已提交产物" -ForegroundColor Green
+}
+else {
+    Write-Host "  (无变更)" -ForegroundColor DarkGray
+}
+
 Write-Host ""
-Write-Host "Release 正文将自动包含您编写的 Notes + MD5 校验标记。" -ForegroundColor DarkGray
+Write-Host "🚀 现在推送即可自动发布:" -ForegroundColor Yellow
+Write-Host "   git tag $tagVersion"
+Write-Host "   git push origin master --tags"
