@@ -10,6 +10,7 @@ using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Shared;
+using EntertainingIsland.Models;
 using EntertainingIsland.Services;
 using Timer = System.Timers.Timer;
 
@@ -20,7 +21,7 @@ namespace EntertainingIsland.Views.Components;
     "摄像头安全指示器",
     "\uE392",
     "摄像头启用时显示绿色圆点")]
-public partial class CameraStatusComponent : ComponentBase
+public partial class CameraStatusComponent : ComponentBase<CameraMonitorSettings>
 {
     private CameraMonitorService? _service;
     private Timer? _collapseTimer;

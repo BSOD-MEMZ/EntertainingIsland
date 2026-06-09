@@ -15,7 +15,7 @@ namespace EntertainingIsland.Views.Components;
 [ComponentInfo(
     "CE50F0A5-A312-466F-8EE4-58EB21A7987A",
     "体育赛事",
-    "\uE7A5",
+    "\uF02B",
     "显示体育比赛比分与排名，支持详细/简洁两种模式。"
 )]
 public partial class SportsComponent : ComponentBase<SportsSettings>

@@ -36,6 +36,11 @@ public partial class Settings : ObservableObject
     [ObservableProperty]
     private CameraMonitorSettings _cameraMonitor = new();
 
+    // ===== 每日运势 =====
+
+    [ObservableProperty]
+    private FortuneSettings _fortune = new();
+
     // ===== 公平点名器 =====
 
     [ObservableProperty]

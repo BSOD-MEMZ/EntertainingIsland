@@ -45,6 +45,7 @@ public class Plugin : PluginBase
         // 确保新增的嵌套设置对象不为 null（兼容旧版配置文件）
         Settings.LuckyPicker ??= new();
         Settings.CameraMonitor ??= new();
+        Settings.Fortune ??= new();
 
         // 当设置发生变化时自动保存
         Settings.PropertyChanged += (sender, args) =>
@@ -94,8 +95,14 @@ public class Plugin : PluginBase
         // 6e. 注册摄像头安全检测服务（单例）
         services.AddSingleton<CameraMonitorService>();
 
-        // 6f. 注册摄像头安全指示器组件
-        services.AddComponent<CameraStatusComponent>();
+        // 6f. 注册摄像头安全指示器组件（带设置面板）
+        services.AddComponent<CameraStatusComponent, CameraMonitorSettingsControl>();
+
+        // 6g. 注册每日运势服务（单例）
+        services.AddSingleton(sp => new FortuneService(Settings.Fortune));
+
+        // 6h. 注册每日运势组件（带设置面板）
+        services.AddComponent<FortuneComponent, FortuneComponentSettingsControl>();
 
         // 6d. 注册点名器通知提供程序
         services.AddNotificationProvider<LuckyPickerNotifier>();
@@ -135,6 +142,8 @@ public class Plugin : PluginBase
         // 8. 注册设置页面
         services.AddSettingsPage<MySettingsPage>();
         services.AddSettingsPage<LuckyPickerSettingsPage>();
+        services.AddSettingsPage<FortuneSettingsPage>();
+        services.AddSettingsPage<CameraMonitorSettingsPage>();
 
         // 7. 应用完全启动后：延迟初始化 + 创建点名器浮窗 + 输出欢迎信息
         AppBase.Current.AppStarted += (o, args) =>
