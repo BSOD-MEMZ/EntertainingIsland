@@ -38,6 +38,9 @@ public class Plugin : PluginBase
     /// </summary>
     public override void Initialize(HostBuilderContext context, IServiceCollection services)
     {
+        // 0. 初始化日志（必须在最早时机，确保后续所有 Logger.xxx 调用能写入）
+        Logger.Initialize(PluginConfigFolder);
+
         // 1. 加载插件配置
         var configPath = Path.Combine(PluginConfigFolder, "Settings.json");
         Settings = ConfigureFileHelper.LoadConfig<Settings>(configPath);

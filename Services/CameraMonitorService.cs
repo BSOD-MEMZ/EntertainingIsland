@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Timers;
 using Avalonia.Threading;
@@ -23,7 +22,6 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
 
     private CameraMonitorSettings? _settings;
     private Timer? _pollTimer;
-    private string _logPath = "";
     private int _tickCount;
     private bool _isCameraInUse;
     private bool _enabled;
@@ -59,10 +57,6 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
 
     public CameraMonitorService()
     {
-        _logPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "EntertainingIsland",
-            "CameraMonitor.log");
     }
 
     /// <summary>使用插件设置初始化服务</summary>
@@ -195,14 +189,8 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
 
     // ================ 日志 ================
 
-    private void Log(string msg)
-    {
-        var line = $"[{DateTime.Now:HH:mm:ss.fff}] {msg}";
-        try { File.AppendAllText(_logPath, line + Environment.NewLine); }
-        catch { }
-    }
-
-    private void LogError(string msg) => Log($"❌ {msg}");
+    private void Log(string msg) => Logger.Info($"[摄像头] {msg}");
+    private void LogError(string msg) => Logger.Error($"[摄像头] {msg}");
 
     // ================ INotifyPropertyChanged ================
 
