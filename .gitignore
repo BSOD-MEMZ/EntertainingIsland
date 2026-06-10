@@ -31,5 +31,3 @@ Thumbs.db
 # ===== 操作系统 =====
 .DS_Store
 Desktop.ini
-!out/
-out/publish/
