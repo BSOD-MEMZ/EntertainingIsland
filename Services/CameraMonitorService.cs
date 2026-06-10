@@ -22,7 +22,6 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
 
     private CameraMonitorSettings? _settings;
     private Timer? _pollTimer;
-    private int _tickCount;
     private bool _isCameraInUse;
     private bool _enabled;
     private bool _disposed;
@@ -64,8 +63,6 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
     {
         _settings = settings;
         _enabled = settings.EnableCameraMonitor;
-        Log("=== 摄像头监控服务启动 ===");
-        Log($"启用={settings.EnableCameraMonitor}, 轮询间隔={settings.PollingIntervalMs}ms");
 
         if (_enabled)
             StartPolling();
@@ -98,8 +95,6 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
         _pollTimer = new Timer(interval) { AutoReset = true };
         _pollTimer.Elapsed += OnPollTimerElapsed;
         _pollTimer.Start();
-        _tickCount = 0;
-        Log($"轮询已启动 (间隔={interval}ms)");
     }
 
     private void StopPolling()
@@ -107,14 +102,11 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
         _pollTimer?.Stop();
         _pollTimer?.Dispose();
         _pollTimer = null;
-        Log("轮询已停止");
     }
 
     private void OnPollTimerElapsed(object? sender, ElapsedEventArgs e)
     {
         if (_settings == null || !_enabled) return;
-        _tickCount++;
-        var verbose = _tickCount <= 5 || _tickCount % 30 == 0;
 
         try
         {
@@ -122,14 +114,10 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
             bool camProc = IsCameraProcessRunning();
             bool cameraInUse = camReg || camProc;
 
-            if (verbose || cameraInUse != _isCameraInUse)
-                Log($"Tick#{_tickCount} | 摄像头: Reg={camReg} Proc={camProc} => {cameraInUse}");
-
             IsCameraInUse = cameraInUse;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            LogError($"异常(Tick#{_tickCount}): {ex.Message}");
         }
     }
 
@@ -186,11 +174,6 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
         catch { }
         return false;
     }
-
-    // ================ 日志 ================
-
-    private void Log(string msg) => Logger.Info($"[摄像头] {msg}");
-    private void LogError(string msg) => Logger.Error($"[摄像头] {msg}");
 
     // ================ INotifyPropertyChanged ================
 

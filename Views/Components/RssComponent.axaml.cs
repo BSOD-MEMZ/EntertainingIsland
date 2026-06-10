@@ -17,7 +17,7 @@ using EntertainingIsland.Services;
 namespace EntertainingIsland.Views.Components;
 
 [ComponentInfo(
-    "80963B55-EC03-46B6-AAC2-CC928A035A22",
+    "753ADD86-8B3D-4A56-87DC-8200810C4E49",
     "RSS 新闻",
     "\uEEAD",
     "显示 RSS 新闻标题，支持自定义源、快捷键翻页和打开链接"
@@ -123,7 +123,7 @@ public partial class RssComponent : ComponentBase<RssComponentSettings>
         var url = Settings.RssFeedUrl;
         if (string.IsNullOrWhiteSpace(url))
         {
-            ShowPlaceholder("请先在组件设置中配置 RSS 源");
+            ShowPlaceholder("加载失败");
             return;
         }
 
@@ -161,16 +161,16 @@ public partial class RssComponent : ComponentBase<RssComponentSettings>
 
             if (_items.Count == 0)
             {
-                ShowPlaceholder("未获取到新闻条目");
+                ShowPlaceholder("加载失败");
                 return;
             }
 
             _currentIndex = 0;
             UpdateDisplay();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            ShowPlaceholder($"RSS 加载失败: {ex.Message}");
+            ShowPlaceholder("加载失败");
         }
     }
 

@@ -11,7 +11,7 @@ using EntertainingIsland.Services;
 namespace EntertainingIsland.Views.Components;
 
 [ComponentInfo(
-    "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
+    "9F954BE3-4CAF-440D-AD3B-03035D0059BF",
     "每日运势",
     "\uEFFF",
     "每日随机宜忌运势，高中生专属趣味运势指南")]

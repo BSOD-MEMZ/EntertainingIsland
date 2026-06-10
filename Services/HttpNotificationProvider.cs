@@ -18,7 +18,7 @@ namespace EntertainingIsland.Services;
 /// HTTP 通知提供程序。轻量封装，延迟绑定 NotificationHostService。
 /// </summary>
 [NotificationProviderInfo(
-    "1AEE506F-B161-4A9C-854D-45D80B403E14",
+    "8DB4B182-8D47-4A11-B6FE-099D080D0ABA",
     "HTTP 通知",
     "\uE025"
 )]

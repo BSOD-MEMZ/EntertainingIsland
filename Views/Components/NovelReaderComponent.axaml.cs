@@ -13,7 +13,7 @@ using EntertainingIsland.Services;
 namespace EntertainingIsland.Views.Components;
 
 [ComponentInfo(
-    "955E7744-4007-4550-9294-70FED5D1745C",
+    "3D6DEF83-0E05-44DD-944B-0A44D439BD56",
     "小说阅读器",
     "\uE215",
     "读取 txt 小说并在主界面显示，支持快捷键翻页和自动保存进度"

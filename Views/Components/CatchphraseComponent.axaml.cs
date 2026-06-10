@@ -7,7 +7,7 @@ using EntertainingIsland.Services;
 namespace EntertainingIsland.Views.Components;
 
 [ComponentInfo(
-    "CF0337E7-EBC4-4EF4-894D-8FF1A12C7ADE",
+    "E5D1D45A-5DA0-4BA9-9075-2466ADF636E0",
     "口头禅记录",
     "\uE3E4",
     "记录老师口头禅，显示统计如：保持安静 x5"

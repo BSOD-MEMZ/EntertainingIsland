@@ -94,7 +94,7 @@
 - 当前课程放大 + 入场动画
   **警告：不建议为真人老师头像使用最低饱和度（黑白）效果**
 
-<img src="docs/AeroShot%207.png" alt="头像课程表" style="zoom:33%;" />
+![](docs/AeroShot7.png)
 
 ## 可作弊点名器
 
@@ -103,7 +103,7 @@
 - 支持 txt 导入名单
 - 隐藏爆率面板：`Ctrl+Shift+Alt+C`（加权 + 保底）
 
-<img src="docs/AeroShot%205.png" alt="可作弊点名器" style="zoom:33%;" />
+![](docs/AeroShot5.png)
 
 ## 体育赛事
 
@@ -113,7 +113,7 @@
 - 详细 / 简洁两种显示模式
 - `Ctrl+Shift+M` 切换显示模式
 
-<img src="docs/AeroShot%203.png" alt="体育赛事" style="zoom:33%;" />
+![](docs/AeroShot3.png)
 
 ## 每日运势
 
@@ -123,7 +123,7 @@
 - "借您吉言"模式：只显示宜，不看忌
 - 一键手动刷新，换一签
 
-<img src="docs/AeroShot%2011.png" alt="每日运势" style="zoom:33%;" />
+![](docs/AeroShot11.png)
 
 ## 摄像头安全指示器
 
@@ -134,7 +134,7 @@
 - 可调轮询间隔（500ms ~ 10000ms）
 - 支持自动化触发：摄像头开启/关闭时执行规则
 
-<img src="docs/AeroShot%2010.png" alt="摄像头安全指示器" style="zoom:33%;" />
+![](docs/AeroShot10.png)
 
 ## 全局安全键
 
