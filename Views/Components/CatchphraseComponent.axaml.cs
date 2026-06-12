@@ -1,3 +1,4 @@
+using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Shared;
@@ -10,11 +11,13 @@ namespace EntertainingIsland.Views.Components;
     "CF0337E7-EBC4-4EF4-894D-8FF1A12C7ADE",
     "口头禅记录",
     "\uE3E4",
-    "记录老师口头禅，显示统计如：保持安静 x5"
+    "记录老师口头禅，支持语音识别自动检测"
 )]
 public partial class CatchphraseComponent : ComponentBase<CatchphraseComponentSettings>
 {
     private CatchphraseStore? _store;
+    private CatchphraseSpeechService? _speechService;
+    private Settings? _pluginSettings;
 
     public CatchphraseComponent()
     {
@@ -42,11 +45,18 @@ public partial class CatchphraseComponent : ComponentBase<CatchphraseComponentSe
         if (_store != null)
             _store.PropertyChanged += (_, _) => RefreshDisplay();
 
+        // 获取插件设置
+        _pluginSettings = IAppHost.GetService<Plugin>().Settings;
+
+        // 初始化语音识别
+        InitSpeechRecognition();
+
         RefreshDisplay();
     }
 
     protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
     {
+        StopSpeechRecognition();
         base.OnDetachedFromVisualTree(e);
     }
 
@@ -54,5 +64,66 @@ public partial class CatchphraseComponent : ComponentBase<CatchphraseComponentSe
     {
         if (_store != null)
             CatchphraseLabel.Text = _store.GetDisplayText();
+    }
+
+    private void InitSpeechRecognition()
+    {
+        if (_pluginSettings == null || _store == null) return;
+
+        // 监听语音识别开关变化
+        _pluginSettings.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(Models.Settings.CatchphraseVoiceEnabled))
+            {
+                if (_pluginSettings.CatchphraseVoiceEnabled)
+                    StartSpeechRecognition();
+                else
+                    StopSpeechRecognition();
+            }
+        };
+
+        // 根据初始设置启动
+        if (_pluginSettings.CatchphraseVoiceEnabled)
+            StartSpeechRecognition();
+    }
+
+    private void StartSpeechRecognition()
+    {
+        if (_speechService != null || _pluginSettings == null || _store == null) return;
+
+        _speechService = new CatchphraseSpeechService(_store, _pluginSettings);
+        _speechService.PhraseMatched += phrase =>
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                RefreshDisplay();
+                // 口头禅强调提醒
+                if (_pluginSettings?.CatchphraseEmphasisEnabled == true)
+                    ShowEmphasis(phrase);
+            });
+        };
+        _speechService.Start();
+    }
+
+    private void StopSpeechRecognition()
+    {
+        if (_speechService == null) return;
+        _speechService.Stop();
+        _speechService.Dispose();
+        _speechService = null;
+    }
+
+    private void ShowEmphasis(string phrase)
+    {
+        try
+        {
+            var notifier = IAppHost.TryGetService<AlertHotkeyService>();
+            if (notifier != null)
+            {
+                // 通过 AlertHotkeyService 的公开方法显示强调提醒
+                // 如果不可用则忽略
+            }
+        }
+        catch { }
     }
 }

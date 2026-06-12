@@ -31,6 +31,14 @@ public partial class Settings : ObservableObject
     [ObservableProperty]
     private bool _catchphraseEmphasisEnabled;
 
+    /// <summary>启用语音识别自动检测口头禅</summary>
+    [ObservableProperty]
+    private bool _catchphraseVoiceEnabled;
+
+    /// <summary>语音识别置信度阈值 (0.0~1.0)，低于此值的识别结果将被忽略</summary>
+    [ObservableProperty]
+    private double _catchphraseVoiceConfidence = 0.5;
+
     // ===== 摄像头安全检测 =====
 
     [ObservableProperty]
