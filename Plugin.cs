@@ -38,6 +38,9 @@ public class Plugin : PluginBase
     /// </summary>
     public override void Initialize(HostBuilderContext context, IServiceCollection services)
     {
+        // 0. 初始化日志（必须在最早时机，确保后续所有 Logger.xxx 调用能写入）
+        Logger.Initialize(PluginConfigFolder);
+
         // 1. 加载插件配置
         var configPath = Path.Combine(PluginConfigFolder, "Settings.json");
         Settings = ConfigureFileHelper.LoadConfig<Settings>(configPath);
@@ -142,8 +145,9 @@ public class Plugin : PluginBase
         // 8. 注册设置页面
         services.AddSettingsPage<MySettingsPage>();
         services.AddSettingsPage<LuckyPickerSettingsPage>();
-        services.AddSettingsPage<FortuneSettingsPage>();
-        services.AddSettingsPage<CameraMonitorSettingsPage>();
+        // Fortune 和 CameraMonitor 已注册为组件，不再在侧边栏显示设置
+        // services.AddSettingsPage<FortuneSettingsPage>();
+        // services.AddSettingsPage<CameraMonitorSettingsPage>();
 
         // 7. 应用完全启动后：延迟初始化 + 创建点名器浮窗 + 输出欢迎信息
         AppBase.Current.AppStarted += (o, args) =>

@@ -42,7 +42,7 @@
 - 显示时长 / 语音播报 / 提示音效 / 窗口置顶
 - 设置入口：ClassIsland 设置 → **提醒** → 窗外有老师警报
 
-<img src="docs/AeroShot%206.png" alt="防巡堂警报" style="zoom:33%;" />
+![](docs/AeroShot6.png)
 
 ## 下课倒计时提醒
 
@@ -53,7 +53,7 @@
 - 语音播报 / 强调效果 / 显示教师名称
 - 设置入口：ClassIsland 设置 → **提醒** → 下课倒计时提醒
 
-<img src="docs/AeroShot%208.png" alt="下课倒计时提醒" style="zoom:33%;" />
+![](docs/AeroShot8.png)
 
 ## 小说阅读器
 
@@ -64,7 +64,7 @@
 - `Ctrl+Shift+↑/↓` 翻页 · `Ctrl+Shift+Space` 暂停/继续
 - 自动保存阅读进度
 
-<img src="docs/AeroShot%209.png" alt="小说阅读器" style="zoom:33%;" />
+![](docs/AeroShot9.png)
 
 ## 口头禅记录
 
@@ -75,7 +75,7 @@
 - 可调识别灵敏度（置信度阈值）
 - 每日自动清零
 
-<img src="docs/AeroShot%202.png" alt="口头禅记录" style="zoom:33%;" />
+![](docs/AeroShot2.png)
 
 ## RSS 新闻
 
@@ -85,7 +85,7 @@
 - `Ctrl+Shift+O` 打开当前链接
 - 内置一些中文源
 
-<img src="docs/AeroShot%204.png" alt="RSS新闻" style="zoom:33%;" />
+![](docs/AeroShot6.png)
 
 ## 头像课程表
 
@@ -96,7 +96,7 @@
 - 当前课程放大 + 入场动画
   **警告：不建议为真人老师头像使用最低饱和度（黑白）效果**
 
-<img src="docs/AeroShot%207.png" alt="头像课程表" style="zoom:33%;" />
+![](docs/AeroShot7.png)
 
 ## 可作弊点名器
 
@@ -105,7 +105,7 @@
 - 支持 txt 导入名单
 - 隐藏爆率面板：`Ctrl+Shift+Alt+C`（加权 + 保底）
 
-<img src="docs/AeroShot%205.png" alt="可作弊点名器" style="zoom:33%;" />
+![](docs/AeroShot5.png)
 
 ## 体育赛事
 
@@ -115,7 +115,7 @@
 - 详细 / 简洁两种显示模式
 - `Ctrl+Shift+M` 切换显示模式
 
-<img src="docs/AeroShot%203.png" alt="体育赛事" style="zoom:33%;" />
+![](docs/AeroShot3.png)
 
 ## 每日运势
 
@@ -125,7 +125,7 @@
 - "借您吉言"模式：只显示宜，不看忌
 - 一键手动刷新，换一签
 
-<img src="docs/AeroShot%2011.png" alt="每日运势" style="zoom:33%;" />
+![](docs/AeroShot11.png)
 
 ## 摄像头安全指示器
 
@@ -136,7 +136,7 @@
 - 可调轮询间隔（500ms ~ 10000ms）
 - 支持自动化触发：摄像头开启/关闭时执行规则
 
-<img src="docs/AeroShot%2010.png" alt="摄像头安全指示器" style="zoom:33%;" />
+![](docs/AeroShot10.png)
 
 ## 全局安全键
 

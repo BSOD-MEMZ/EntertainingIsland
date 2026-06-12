@@ -127,27 +127,32 @@ $md5Line
 "@
 $finalBody | Set-Content $bodyFile -Encoding UTF8
 
+# 也写入仓库根目录供 CI 读取（out/ 已被 gitignore）
+$ciBodyFile = "$pluginProject\RELEASE_BODY.md"
+$finalBody | Set-Content $ciBodyFile -Encoding UTF8
+
 Write-Host "`n✅ 发布准备完成！" -ForegroundColor Green
 Write-Host ""
 Write-Host "📝 Release 说明: $bodyFile" -ForegroundColor Cyan
 Write-Host ""
 
-# 7. 自动将产物加入 Git 提交
+# 7. 仅提交 RELEASE_BODY.md（产物由 CI 构建）
 $tagVersion = if ($manifest -match '(?m)^version:\s*([0-9.]+)') { $Matches[1] } else { '?.?.?.?' }
 
-Write-Host "📤 将产物加入 Git..." -ForegroundColor Yellow
+Write-Host "📤 提交 Release 说明..." -ForegroundColor Yellow
 Set-Location $pluginProject
-git add out/ 2>$null
-$hasChanges = git status --porcelain out/
+git add RELEASE_BODY.md 2>$null
+$hasChanges = git status --porcelain RELEASE_BODY.md
 if ($hasChanges) {
-    git commit -m "发布 v$tagVersion 产物"
-    Write-Host "✅ 已提交产物" -ForegroundColor Green
+    git commit -m "发布 v$tagVersion 说明"
+    Write-Host "✅ 已提交 RELEASE_BODY.md" -ForegroundColor Green
 }
 else {
     Write-Host "  (无变更)" -ForegroundColor DarkGray
 }
 
 Write-Host ""
-Write-Host "🚀 现在推送即可自动发布:" -ForegroundColor Yellow
+Write-Host "🚀 推送 tag 即可自动构建发布:" -ForegroundColor Yellow
+Write-Host "   git push origin master"
 Write-Host "   git tag $tagVersion"
-Write-Host "   git push origin master --tags"
+Write-Host "   git push origin $tagVersion"

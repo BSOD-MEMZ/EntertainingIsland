@@ -18,7 +18,7 @@ namespace EntertainingIsland.Services;
 /// Ctrl+Shift+J 触发警报通知，Ctrl+Shift+K 全局安全键（消警 + 隐藏/显示所有娱乐组件）。
 /// </summary>
 [NotificationProviderInfo(
-    "611367B9-5911-4101-BEF0-4B74AB76A2B1",
+    "49D83EC3-E84A-4072-97AB-C101C121DAA1",
     "窗外有老师警报",
     "\uF431",
     "按下热键触发警报通知，提醒学生外面有老师视奸。"

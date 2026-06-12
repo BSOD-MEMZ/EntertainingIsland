@@ -10,16 +10,25 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: 📥 检出代码
         uses: actions/checkout@v4
 
+      - name: ⚙ 安装 .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 🔨 构建 & 打包
+        run: .\package.ps1 -Ci
+        shell: pwsh
+
       - name: 📝 读取 Release 说明
         id: body
+        shell: bash
         run: |
-          BODY=$(cat out/release-body.md)
-          # 多行输出
+          BODY=$(cat RELEASE_BODY.md)
           echo "body<<EOF" >> $GITHUB_OUTPUT
           echo "$BODY" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT

@@ -17,7 +17,7 @@ using Timer = System.Timers.Timer;
 namespace EntertainingIsland.Views.Components;
 
 [ComponentInfo(
-    "B2C3D4E5-F6A7-8901-BCDE-F12345678901",
+    "67DE88FC-54C4-41D1-819F-6C28235636D0",
     "摄像头安全指示器",
     "\uE392",
     "摄像头启用时显示绿色圆点")]

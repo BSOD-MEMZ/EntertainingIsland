@@ -17,7 +17,7 @@ namespace EntertainingIsland.Services;
 /// Mask 显示双图标 + 文字，Overlay 使用 ClassEndingNotificationControl（左右分栏：倒计时 + 下节课信息）。
 /// </summary>
 [NotificationProviderInfo(
-    "68EFA00E-7700-4037-8F50-D2DF965372E5",
+    "B9C51AD9-C0C4-40BD-A8B6-505E1C8F0B15",
     "下课倒计时提醒",
     "\uF361",
     "在上课即将结束时显示提醒，样式和即将上课提醒一样。"

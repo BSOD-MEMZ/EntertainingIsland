@@ -4,39 +4,33 @@ using System.IO;
 namespace EntertainingIsland.Services;
 
 /// <summary>
-/// 简单的文件日志器，将日志写入插件目录下的 Logs 文件夹。
+/// 简单的文件日志器，将日志写入插件配置目录下的 Logs 文件夹。
 /// 方便不会 C# 的用户查看运行状态。
 /// </summary>
 public static class Logger
 {
-    private static readonly string LogDir;
+    private static string LogDir = null!;
     private static readonly object LockObj = new();
 
-    static Logger()
+    /// <summary>
+    /// 初始化日志目录。应在插件 Initialize 时调用。
+    /// </summary>
+    public static void Initialize(string pluginConfigFolder)
     {
-        // 日志目录放在插件 DLL 所在目录的 Logs 子文件夹
-        var dllDir = Path.GetDirectoryName(typeof(Logger).Assembly.Location);
-        LogDir = Path.Combine(dllDir ?? ".", "Logs");
+        LogDir = Path.Combine(pluginConfigFolder, "Logs");
         try { Directory.CreateDirectory(LogDir); } catch { }
     }
 
-    public static void Info(string message)
-    {
-        Write("INFO", message);
-    }
+    public static void Info(string message) => Write("INFO", message);
 
-    public static void Error(string message)
-    {
-        Write("ERROR", message);
-    }
+    public static void Error(string message) => Write("ERROR", message);
 
-    public static void Warn(string message)
-    {
-        Write("WARN", message);
-    }
+    public static void Warn(string message) => Write("WARN", message);
 
     private static void Write(string level, string message)
     {
+        if (LogDir == null) return;
+
         try
         {
             var today = DateTime.Now.ToString("yyyy-MM-dd");
@@ -60,6 +54,9 @@ public static class Logger
     {
         try
         {
+            if (LogDir == null || !Directory.Exists(LogDir))
+                return "(未初始化)";
+
             var files = Directory.GetFiles(LogDir, "teacher-alert-*.log");
             return files.Length > 0
                 ? files.OrderByDescending(f => f).First()
@@ -67,7 +64,7 @@ public static class Logger
         }
         catch
         {
-            return LogDir;
+            return "(获取失败)";
         }
     }
 }

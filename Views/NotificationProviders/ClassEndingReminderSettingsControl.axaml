@@ -12,94 +12,101 @@
     mc:Ignorable="d"
     d:DesignHeight="500" d:DesignWidth="800">
 
-    <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:ClassEndingReminderSettingsControl}}"
-                Classes="settings-container animated-intro">
+    <ScrollViewer>
+        <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:ClassEndingReminderSettingsControl}}"
+                    Classes="settings-container animated-intro">
 
-        <ci:IconText Glyph="&#xF361;" Text="下课倒计时提醒" Margin="0 0 0 4" />
+            <!-- 启用下课提醒 -->
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEDE9;}"
+                                 Header="启用下课提醒"
+                                 Description="开启后，在距下课指定秒数时自动弹出提醒通知。">
+                <fa:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsEnabled}" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
 
-        <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEDE9;}"
-                             Header="启用下课提醒"
-                             Description="开启后，在距下课指定秒数时自动弹出提醒通知。">
-            <fa:SettingsExpander.Footer>
-                <ToggleSwitch IsChecked="{Binding Settings.IsEnabled}" />
-            </fa:SettingsExpander.Footer>
-        </fa:SettingsExpander>
+            <!-- 提前提醒秒数 -->
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF361;}"
+                                 Header="提前提醒秒数"
+                                 Description="在下课前多少秒触发提醒">
+                <fa:SettingsExpander.Footer>
+                    <NumericUpDown Value="{Binding Settings.DeltaTime}"
+                                   Minimum="1" Maximum="3600"
+                                   Increment="5" Width="120" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
 
-        <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF361;}"
-                             Header="提前提醒秒数"
-                             Description="在下课前多少秒触发提醒">
-            <fa:SettingsExpander.Footer>
-                <NumericUpDown Value="{Binding Settings.DeltaTime}"
-                               Minimum="1" Maximum="3600"
-                               Increment="5" Width="120" />
-            </fa:SettingsExpander.Footer>
-        </fa:SettingsExpander>
+            <!-- 提醒遮罩文字 -->
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE8D4;}"
+                                 Header="提醒遮罩文字"
+                                 Description="通知遮罩上显示的简短文字。">
+                <fa:SettingsExpander.Footer>
+                    <TextBox Text="{Binding Settings.MaskText}"
+                             Width="200"
+                             Watermark="即将下课" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
 
-        <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF263;}"
-                             Header="提醒遮罩文字"
-                             Description="通知遮罩上显示的简短文字">
-            <fa:SettingsExpander.Footer>
-                <TextBox Text="{Binding Settings.MaskText}"
-                         Width="200"
-                         Watermark="即将下课" />
-            </fa:SettingsExpander.Footer>
-        </fa:SettingsExpander>
+            <!-- 提醒详细文字 -->
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE8D4;}"
+                                 Header="提醒详细文字"
+                                 Description="叠加层第二页轮播显示的详细提醒内容。">
+                <fa:SettingsExpander.Footer>
+                    <TextBox Text="{Binding Settings.OverlayText}"
+                             Width="280"
+                             Watermark="本堂课即将结束，请注意整理笔记。" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
 
-        <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF263;}"
-                             Header="提醒详细文字"
-                             Description="叠加层第二页轮播显示的详细提醒内容。">
-            <fa:SettingsExpander.Footer>
-                <TextBox Text="{Binding Settings.OverlayText}"
-                         Width="280"
-                         Watermark="本堂课即将结束，请注意整理笔记。" />
-            </fa:SettingsExpander.Footer>
-        </fa:SettingsExpander>
+            <!-- 显示教师名称 -->
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE7A0;}"
+                                 Header="显示教师名称"
+                                 Description="在叠加层中显示当前课程的教师名称。">
+                <fa:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.ShowTeacherName}" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
 
-        <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE8D4;}"
-                             Header="显示教师名称"
-                             Description="在叠加层中显示下一节课的教师名称。">
-            <fa:SettingsExpander.Footer>
-                <ToggleSwitch IsChecked="{Binding Settings.ShowTeacherName}" />
-            </fa:SettingsExpander.Footer>
-        </fa:SettingsExpander>
+            <!-- 启用强调效果 -->
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEA2F;}"
+                                 Header="启用强调效果"
+                                 Description="触发提醒时播放全屏强调特效。">
+                <fa:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.EnableEmphasisEffect}" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
 
-        <Separator Margin="0 12 0 4" />
-        <ci:IconText Glyph="&#xF265;" Text="通知效果设置" Margin="0 0 0 4" />
+            <!-- 启用语音播报 -->
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xED53;}"
+                                 Header="启用语音播报"
+                                 Description="触发提醒时播报倒计时语音。">
+                <fa:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.EnableSpeech}" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
 
-        <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF265;}"
-                             Header="启用强调效果"
-                             Description="使用 ClassIsland 当前主题色作为通知涟漪颜色。">
-            <fa:SettingsExpander.Footer>
-                <ToggleSwitch IsChecked="{Binding Settings.EnableEmphasisEffect}" />
-            </fa:SettingsExpander.Footer>
-        </fa:SettingsExpander>
+            <!-- 启用提示音效 -->
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE649;}"
+                                 Header="启用提示音效"
+                                 Description="触发提醒时播放提示音。">
+                <fa:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.EnableSound}" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
 
-        <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEB70;}"
-                             Header="启用语音播报"
-                             Description="触发提醒时播报倒计时语音。">
-            <fa:SettingsExpander.Footer>
-                <ToggleSwitch IsChecked="{Binding Settings.EnableSpeech}" />
-            </fa:SettingsExpander.Footer>
-        </fa:SettingsExpander>
+            <!-- 调试：预览下课效果 -->
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE9E4;}"
+                                 Header="调试：预览下课效果"
+                                 Description="点击按钮立即触发一次下课倒计时提醒，用于查看样式效果。">
+                <fa:SettingsExpander.Footer>
+                    <Button Content="预览"
+                            Command="{Binding DebugPreviewCommand}"
+                            HorizontalAlignment="Right"
+                            Width="80" />
+                </fa:SettingsExpander.Footer>
+            </fa:SettingsExpander>
 
-        <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF00D;}"
-                             Header="启用提示音效"
-                             Description="触发提醒时播放提示音。">
-            <fa:SettingsExpander.Footer>
-                <ToggleSwitch IsChecked="{Binding Settings.EnableSound}" />
-            </fa:SettingsExpander.Footer>
-        </fa:SettingsExpander>
+        </StackPanel>
+    </ScrollViewer>
 
-        <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE9E4;}"
-                             Header="调试：预览下课效果"
-                             Description="点击按钮立即触发一次下课倒计时提醒，用于查看样式效果。">
-            <fa:SettingsExpander.Footer>
-                <Button Content="预览"
-                        Command="{Binding DebugPreviewCommand}"
-                        HorizontalAlignment="Right"
-                        Width="80" />
-            </fa:SettingsExpander.Footer>
-        </fa:SettingsExpander>
-
-    </StackPanel>
 </ci:NotificationProviderControlBase>
