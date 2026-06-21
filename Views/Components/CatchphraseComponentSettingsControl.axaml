@@ -59,7 +59,7 @@
                 </StackPanel>
             </fa:SettingsExpander>
 
-            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE720;}"
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEB80;}"
                                  Header="语音识别自动检测"
                                  Description="通过麦克风监听，自动识别老师说的口头禅并 +1。需要 Windows 中文语音识别支持。">
                 <fa:SettingsExpander.Footer>
@@ -67,7 +67,7 @@
                 </fa:SettingsExpander.Footer>
             </fa:SettingsExpander>
 
-            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE9D9;}"
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEB90;}"
                                  Header="识别灵敏度"
                                  Description="置信度阈值，越低越灵敏（更容易误识别），越高越严格。"
                                  IsVisible="{Binding PluginSettings.CatchphraseVoiceEnabled}">
@@ -87,7 +87,7 @@
                 </fa:SettingsExpander.Footer>
             </fa:SettingsExpander>
 
-            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE74D;}"
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE61D;}"
                                  Header="清空统计"
                                  Description="清除所有口头禅计数记录。">
                 <fa:SettingsExpander.Footer>
