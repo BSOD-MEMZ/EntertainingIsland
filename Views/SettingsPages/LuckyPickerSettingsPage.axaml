@@ -15,7 +15,6 @@
     <ScrollViewer>
         <StackPanel Classes="settings-container animated-intro">
 
-            <ci:IconText Glyph="&#xE716;" Text="点名器" Margin="0 0 0 4" />
 
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEDE9;}"
                                  Header="启用点名器"

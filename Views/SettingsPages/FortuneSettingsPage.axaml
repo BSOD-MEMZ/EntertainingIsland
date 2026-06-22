@@ -16,8 +16,6 @@
     <ScrollViewer>
         <StackPanel Classes="settings-container animated-intro">
 
-            <ci:IconText Glyph="&#xE8D6;" Text="每日运势" Margin="0 0 0 4" />
-
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEDE9;}"
                                  Header="启用每日运势"
                                  Description="在信息岛显示每日宜忌运势。">
@@ -51,11 +49,6 @@
                 </StackPanel>
             </fa:SettingsExpander>
 
-            <Separator Margin="0 12 0 4" />
-
-            <!-- 宜条目池 -->
-            <ci:IconText Glyph="&#xF05B;" Text="宜... 条目池" Margin="0 0 0 4" />
-
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF05B;}"
                                  Header="宜... 条目池"
                                  Description="每天随机从池中抽取「宜」条目。"
@@ -85,11 +78,6 @@
                             HorizontalAlignment="Left" />
                 </StackPanel>
             </fa:SettingsExpander>
-
-            <Separator Margin="0 12 0 4" />
-
-            <!-- 忌条目池 -->
-            <ci:IconText Glyph="&#xF05B;" Text="忌... 条目池" Margin="0 0 0 4" />
 
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF05B;}"
                                  Header="忌... 条目池"

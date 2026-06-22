@@ -53,6 +53,19 @@ public partial class HotkeyConfig : ObservableObject
     }
 
     /// <summary>
+    /// 获取 Linux X11 XGrabKey 所需的修饰键掩码
+    /// </summary>
+    public uint GetX11Modifiers()
+    {
+        uint mod = 0;
+        if (Shift) mod |= Services.NativeMethods.X11ShiftMask;
+        if (Ctrl) mod |= Services.NativeMethods.X11ControlMask;
+        if (Alt) mod |= Services.NativeMethods.X11Mod1Mask;
+        if (Win) mod |= Services.NativeMethods.X11Mod4Mask;
+        return mod;
+    }
+
+    /// <summary>
     /// 克隆一个副本
     /// </summary>
     public HotkeyConfig Clone()

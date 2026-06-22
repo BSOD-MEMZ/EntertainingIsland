@@ -16,8 +16,6 @@
                   DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:CameraMonitorSettingsControl}}">
         <StackPanel Classes="settings-container animated-intro">
 
-            <ci:IconText Glyph="&#xE392;" Text="摄像头安全指示器" Margin="0 0 0 4" />
-
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEDE9;}"
                                  Header="启用摄像头监控"
                                  Description="摄像头被调用时，信息岛显示绿色圆点提醒。">

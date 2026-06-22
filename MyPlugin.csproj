@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -11,11 +11,13 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <!-- 复制清单和图标到输出目录 -->
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- 插件 SDK 核心库 -->
     <PackageReference Include="ClassIsland.PluginSdk" Version="2.0.0.2" />
+    <!-- System.Speech 仅在 Windows 上可用，Linux 编译引用但运行时不调用 -->
     <PackageReference Include="System.Speech" Version="8.0.0" />
   </ItemGroup>
 

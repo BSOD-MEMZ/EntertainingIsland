@@ -27,11 +27,7 @@ public partial class NovelReaderComponent : ComponentBase<NovelReaderSettings>
 
     // 全局热键翻页 + 暂停
     private static NovelReaderComponent? _activeInstance;
-    private const int HK_PAGEUP = 8001;
-    private const int HK_PAGEDOWN = 8002;
-    private const int HK_PAUSE = 8003;
     private bool _isPaused;
-    private HotkeyManager? _hotkeys;
 
     public NovelReaderComponent()
     {
@@ -97,27 +93,10 @@ public partial class NovelReaderComponent : ComponentBase<NovelReaderSettings>
             }
             if (name == nameof(NovelReaderSettings.NovelFlipIntervalSeconds) && _flipTimer != null)
                 _flipTimer.Interval = Math.Max(1, Settings.NovelFlipIntervalSeconds) * 1000;
-            if (name is nameof(NovelReaderSettings.PageUpHotkey)
-                or nameof(NovelReaderSettings.PageDownHotkey)
-                or nameof(NovelReaderSettings.PauseHotkey))
-            {
-                _hotkeys?.Refresh();
-            }
         };
-
-        Settings.PageUpHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
-        Settings.PageDownHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
-        Settings.PauseHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
 
         // 点击组件切换暂停
         RootPanel.PointerPressed += (_, _) => { TogglePause(); };
-
-        // 热键管理器
-        _hotkeys = new HotkeyManager(OnHotkey);
-        _hotkeys.Add(HK_PAGEUP, Settings.PageUpHotkey);
-        _hotkeys.Add(HK_PAGEDOWN, Settings.PageDownHotkey);
-        _hotkeys.Add(HK_PAUSE, Settings.PauseHotkey);
-        _hotkeys.Start();
 
         UpdateDisplay();
     }
@@ -125,22 +104,9 @@ public partial class NovelReaderComponent : ComponentBase<NovelReaderSettings>
     protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
     {
         SaveProgress();
-        _hotkeys?.Dispose();
-        _hotkeys = null;
         if (_activeInstance == this) _activeInstance = null;
         _flipTimer?.Stop(); _flipTimer?.Dispose(); _flipTimer = null;
         base.OnDetachedFromVisualTree(e);
-    }
-
-    private void OnHotkey(int id)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            if (_activeInstance == null) return;
-            if (id == HK_PAGEUP) _activeInstance.FlipPage(-1);
-            else if (id == HK_PAGEDOWN) _activeInstance.FlipPage(+1);
-            else if (id == HK_PAUSE) _activeInstance.TogglePause();
-        });
     }
 
     private void LoadNovel(string path)

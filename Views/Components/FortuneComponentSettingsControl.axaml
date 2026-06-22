@@ -16,8 +16,6 @@
                   DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:FortuneComponentSettingsControl}}">
         <StackPanel Classes="settings-container animated-intro">
 
-            <ci:IconText Glyph="&#xEFFF;" Text="每日运势" Margin="0 0 0 4" />
-
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEDE9;}"
                                  Header="借您吉言"
                                  Description="开启后隐藏忌运势，只看好运。">
@@ -53,11 +51,6 @@
                 </StackPanel>
             </fa:SettingsExpander>
 
-            <Separator Margin="0 12 0 4" />
-
-            <!-- 宜条目池 -->
-            <ci:IconText Glyph="&#xEFFF;" Text="宜... 条目池" Margin="0 0 0 4" />
-
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEFFF;}"
                                  Header="宜... 条目池"
                                  Description="每天随机从池中抽取「宜」条目。"
@@ -88,10 +81,6 @@
                 </StackPanel>
             </fa:SettingsExpander>
 
-            <Separator Margin="0 12 0 4" />
-
-            <!-- 忌条目池 -->
-            <ci:IconText Glyph="&#xF05B;" Text="忌... 条目池" Margin="0 0 0 4" />
 
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF05B;}"
                                  Header="忌... 条目池"

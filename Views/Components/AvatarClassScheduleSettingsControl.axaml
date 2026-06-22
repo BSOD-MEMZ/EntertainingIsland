@@ -15,9 +15,6 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:AvatarClassScheduleSettingsControl}}">
         <StackPanel Classes="settings-container animated-intro">
-
-            <ci:IconText Glyph="&#xECE5;" Text="科目头像映射" Margin="0 0 0 4" />
-
             <!-- ===== 科目头像映射 ===== -->
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xECE5;}"
                                  Header="科目头像映射"

@@ -19,18 +19,6 @@ public partial class RssComponentSettings : ObservableObject
 
     [ObservableProperty]
     private int _rssMaxTitleLength = 50;
-
-    /// <summary>上翻快捷键</summary>
-    [ObservableProperty]
-    private HotkeyConfig _pageUpHotkey = new() { Ctrl = true, Shift = false, Key = "Left" };
-
-    /// <summary>下翻快捷键</summary>
-    [ObservableProperty]
-    private HotkeyConfig _pageDownHotkey = new() { Ctrl = true, Shift = false, Key = "Right" };
-
-    /// <summary>打开链接快捷键</summary>
-    [ObservableProperty]
-    private HotkeyConfig _openHotkey = new() { Ctrl = true, Shift = true, Key = "O" };
 }
 
 /// <summary>

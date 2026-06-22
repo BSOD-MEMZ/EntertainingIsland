@@ -107,7 +107,10 @@ public class Plugin : PluginBase
         // 6h. 注册每日运势组件（带设置面板）
         services.AddComponent<FortuneComponent, FortuneComponentSettingsControl>();
 
-        // 6d. 注册点名器通知提供程序
+        // 6i. 注册点名器服务（单例）
+        services.AddSingleton(sp => new LuckyPickerService(Settings.LuckyPicker));
+
+        // 6j. 注册点名器通知提供程序
         services.AddNotificationProvider<LuckyPickerNotifier>();
         // 额外注册为自身类型，以便 TryGetService 能解析（AddNotificationProvider 只注册为 IHostedService）
         services.AddSingleton(sp => sp.GetServices<IHostedService>().OfType<LuckyPickerNotifier>().First());
@@ -169,7 +172,8 @@ public class Plugin : PluginBase
                 if (Settings.LuckyPicker.IsEnabled)
                 {
                     var luckySettings = Settings.LuckyPicker;
-                    var service = new LuckyPickerService(luckySettings);
+                    var service = IAppHost.TryGetService<LuckyPickerService>();
+                    if (service == null) return;
                     var notifier = IAppHost.TryGetService<LuckyPickerNotifier>();
                     var window = new LuckyPickerWindow();
                     window.Initialize(luckySettings, service, notifier);

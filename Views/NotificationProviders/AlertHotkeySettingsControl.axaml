@@ -16,8 +16,6 @@
         <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:AlertHotkeySettingsControl}}"
                 Classes="settings-container animated-intro">
 
-        <ci:IconText Glyph="&#xF431;" Text="窗外有老师 警报" Margin="0 0 0 4" />
-
         <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEDE9;}"
                              Header="启用警报功能"
                              Description="开启后，按下警报快捷键即可弹出 ClassIsland 原生通知警报。">
@@ -55,9 +53,6 @@
                 </StackPanel>
             </StackPanel>
         </fa:SettingsExpander>
-
-        <Separator Margin="0 12 0 4" />
-        <ci:IconText Glyph="&#xF265;" Text="通知效果设置" Margin="0 0 0 4" />
 
         <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xF361;}"
                              Header="显示时长"

@@ -21,7 +21,6 @@
                         Title="注意"
                         Message="我个人完全不了解体育赛事且不感兴趣，无法保证数据准确性。赛事数据来自 TheSportsDB 免费 API（Key=3），存在以下限制：每日请求次数有限（约 100 次）；数据可能不是实时更新；部分联赛/比赛的详细信息可能不完整。若需稳定数据源，可在下方填入自定义 API 地址。" />
 
-            <ci:IconText Glyph="&#xE7A5;" Text="赛事数据" Margin="0 0 0 4" />
 
             <fa:SettingsExpander Header="联赛"
                                  Description="选择一个联赛，自动从 TheSportsDB 获取数据。">
@@ -62,10 +61,6 @@
                          MinHeight="80"
                          TextWrapping="Wrap" />
             </fa:SettingsExpander>
-
-            <Separator Margin="0 12 0 4" />
-            <ci:IconText Glyph="&#xE7A5;" Text="显示设置" Margin="0 0 0 4" />
-
             <fa:SettingsExpander Header="轮播间隔"
                                  Description="每场比赛显示的秒数。">
                 <fa:SettingsExpander.Footer>
@@ -84,45 +79,6 @@
                 <fa:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.DetailedMode}" />
                 </fa:SettingsExpander.Footer>
-            </fa:SettingsExpander>
-
-            <Separator Margin="0 12 0 4" />
-            <ci:IconText Glyph="&#xEA0B;" Text="快捷键" Margin="0 0 0 4" />
-
-            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEA0B;}"
-                                 Header="快捷键"
-                                 Description="设置翻页和模式切换快捷键。"
-                                 IsExpanded="False">
-                <StackPanel Spacing="8" Margin="0,8,0,0">
-
-                    <TextBlock Text="上翻" FontSize="12" Opacity="0.7" />
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Ctrl}" Content="Ctrl" />
-                        <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Shift}" Content="Shift" />
-                        <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Alt}" Content="Alt" />
-                    </StackPanel>
-                    <ComboBox SelectedItem="{Binding Settings.PageUpHotkey.Key}"
-                              ItemsSource="{Binding KeyOptions}" Width="120" />
-
-                    <TextBlock Text="下翻" FontSize="12" Opacity="0.7" Margin="0,8,0,0" />
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Ctrl}" Content="Ctrl" />
-                        <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Shift}" Content="Shift" />
-                        <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Alt}" Content="Alt" />
-                    </StackPanel>
-                    <ComboBox SelectedItem="{Binding Settings.PageDownHotkey.Key}"
-                              ItemsSource="{Binding KeyOptions}" Width="120" />
-
-                    <TextBlock Text="切换详细/简洁模式" FontSize="12" Opacity="0.7" Margin="0,8,0,0" />
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <CheckBox IsChecked="{Binding Settings.ToggleModeHotkey.Ctrl}" Content="Ctrl" />
-                        <CheckBox IsChecked="{Binding Settings.ToggleModeHotkey.Shift}" Content="Shift" />
-                        <CheckBox IsChecked="{Binding Settings.ToggleModeHotkey.Alt}" Content="Alt" />
-                    </StackPanel>
-                    <ComboBox SelectedItem="{Binding Settings.ToggleModeHotkey.Key}"
-                              ItemsSource="{Binding KeyOptions}" Width="120" />
-
-                </StackPanel>
             </fa:SettingsExpander>
 
         </StackPanel>

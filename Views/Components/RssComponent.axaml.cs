@@ -30,12 +30,8 @@ public partial class RssComponent : ComponentBase<RssComponentSettings>
     private int _currentIndex;
     private static readonly HttpClient _http = new() { Timeout = TimeSpan.FromSeconds(10) };
 
-    // 全局热键
+    // 活动实例（供 Automation Actions 引用）
     private static RssComponent? _activeInstance;
-    private const int HK_RSS_PAGEUP = 8010;
-    private const int HK_RSS_PAGEDOWN = 8011;
-    private const int HK_RSS_OPEN = 8012;
-    private HotkeyManager? _hotkeys;
 
     private record RssItem(string Title, string Url);
 
@@ -78,44 +74,14 @@ public partial class RssComponent : ComponentBase<RssComponentSettings>
                 LoadFeed();
             if (name == nameof(RssComponentSettings.RssFlipIntervalSeconds) && _flipTimer != null)
                 _flipTimer.Interval = Math.Max(2, Settings.RssFlipIntervalSeconds) * 1000;
-            if (name is nameof(RssComponentSettings.PageUpHotkey)
-                or nameof(RssComponentSettings.PageDownHotkey)
-                or nameof(RssComponentSettings.OpenHotkey))
-            {
-                _hotkeys?.Refresh();
-            }
         };
-
-        Settings.PageUpHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
-        Settings.PageDownHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
-        Settings.OpenHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
-
-        // 热键管理器
-        _hotkeys = new HotkeyManager(OnHotkey);
-        _hotkeys.Add(HK_RSS_PAGEUP, Settings.PageUpHotkey);
-        _hotkeys.Add(HK_RSS_PAGEDOWN, Settings.PageDownHotkey);
-        _hotkeys.Add(HK_RSS_OPEN, Settings.OpenHotkey);
-        _hotkeys.Start();
     }
 
     protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
     {
-        _hotkeys?.Dispose();
-        _hotkeys = null;
         if (_activeInstance == this) _activeInstance = null;
         _flipTimer?.Stop(); _flipTimer?.Dispose(); _flipTimer = null;
         base.OnDetachedFromVisualTree(e);
-    }
-
-    private void OnHotkey(int id)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            if (_activeInstance == null) return;
-            if (id == HK_RSS_PAGEUP) _activeInstance.Flip(-1);
-            else if (id == HK_RSS_PAGEDOWN) _activeInstance.Flip(+1);
-            else if (id == HK_RSS_OPEN) _activeInstance.OpenCurrentUrl();
-        });
     }
 
     private async void LoadFeed()

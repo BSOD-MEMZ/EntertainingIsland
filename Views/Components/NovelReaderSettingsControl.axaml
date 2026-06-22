@@ -14,9 +14,6 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:NovelReaderSettingsControl}}">
         <StackPanel Classes="settings-container animated-intro">
-
-            <ci:IconText Glyph="&#xE687;" Text="小说阅读器" Margin="0 0 0 4" />
-
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE687;}"
                                  Header="小说文件"
                                  Description="选择要显示的 txt 小说文件。">
@@ -48,49 +45,6 @@
                                    Minimum="1" Maximum="120"
                                    Increment="1" Width="120" />
                 </fa:SettingsExpander.Footer>
-            </fa:SettingsExpander>
-
-            <!-- 翻页快捷键 -->
-            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEA0B;}"
-                                 Header="翻页快捷键"
-                                 Description="使用全局快捷键手动翻页，修改后需重启 ClassIsland 生效。"
-                                 IsExpanded="False">
-                <StackPanel Spacing="8" Margin="0,8,0,0">
-                    <!-- 上翻 -->
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="上翻：" VerticalAlignment="Center" Width="36" />
-                        <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Ctrl}" Content="Ctrl" />
-                        <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Shift}" Content="Shift" />
-                        <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Alt}" Content="Alt" />
-                        <ComboBox SelectedItem="{Binding Settings.PageUpHotkey.Key}"
-                                  Width="70" ItemsSource="{Binding #SettingsRoot.KeyOptions}" />
-                    </StackPanel>
-                    <!-- 下翻 -->
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="下翻：" VerticalAlignment="Center" Width="36" />
-                        <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Ctrl}" Content="Ctrl" />
-                        <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Shift}" Content="Shift" />
-                        <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Alt}" Content="Alt" />
-                        <ComboBox SelectedItem="{Binding Settings.PageDownHotkey.Key}"
-                                  Width="70" ItemsSource="{Binding #SettingsRoot.KeyOptions}" />
-                    </StackPanel>
-                </StackPanel>
-            </fa:SettingsExpander>
-
-            <!-- 暂停快捷键 -->
-            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE9A8;}"
-                                 Header="暂停快捷键"
-                                 Description="使用全局快捷键暂停/继续自动翻页。"
-                                 IsExpanded="False">
-                <StackPanel Spacing="8" Margin="0,8,0,0">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <CheckBox IsChecked="{Binding Settings.PauseHotkey.Ctrl}" Content="Ctrl" />
-                        <CheckBox IsChecked="{Binding Settings.PauseHotkey.Shift}" Content="Shift" />
-                        <CheckBox IsChecked="{Binding Settings.PauseHotkey.Alt}" Content="Alt" />
-                        <ComboBox SelectedItem="{Binding Settings.PauseHotkey.Key}"
-                                  Width="70" ItemsSource="{Binding #SettingsRoot.KeyOptions}" />
-                    </StackPanel>
-                </StackPanel>
             </fa:SettingsExpander>
 
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE12F;}"

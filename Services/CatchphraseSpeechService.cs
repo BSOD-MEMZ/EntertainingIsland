@@ -26,6 +26,13 @@ public class CatchphraseSpeechService : IDisposable
 
     public void Start()
     {
+        // 语音识别仅在 Windows 上可用（依赖 System.Speech / SAPI）
+        if (!OperatingSystem.IsWindows())
+        {
+            Logger.Info("[语音识别] 当前平台不支持语音识别，已跳过");
+            return;
+        }
+
         if (_engine != null) return;
 
         _thread = new Thread(SpeechThread)

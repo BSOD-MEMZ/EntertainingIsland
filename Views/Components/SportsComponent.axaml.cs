@@ -23,12 +23,8 @@ public partial class SportsComponent : ComponentBase<SportsSettings>
     private System.Timers.Timer? _flipTimer;
     private SportsService? _service;
 
-    // 全局热键
+    // 活动实例（供 Automation Actions 引用）
     private static SportsComponent? _activeInstance;
-    private const int HK_PAGEUP = 8020;
-    private const int HK_PAGEDOWN = 8021;
-    private const int HK_TOGGLE_MODE = 8022;
-    private HotkeyManager? _hotkeys;
 
     public SportsComponent()
     {
@@ -71,46 +67,16 @@ public partial class SportsComponent : ComponentBase<SportsSettings>
                 _flipTimer.Interval = Math.Max(2, Settings.FlipIntervalSeconds) * 1000;
             if (name == nameof(SportsSettings.DetailedMode))
                 UpdateDisplay();
-            if (name is nameof(SportsSettings.PageUpHotkey)
-                or nameof(SportsSettings.PageDownHotkey)
-                or nameof(SportsSettings.ToggleModeHotkey))
-            {
-                _hotkeys?.Refresh();
-            }
         };
-
-        Settings.PageUpHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
-        Settings.PageDownHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
-        Settings.ToggleModeHotkey.PropertyChanged += (_, _) => _hotkeys?.Refresh();
-
-        // 热键管理器
-        _hotkeys = new HotkeyManager(OnHotkey);
-        _hotkeys.Add(HK_PAGEUP, Settings.PageUpHotkey);
-        _hotkeys.Add(HK_PAGEDOWN, Settings.PageDownHotkey);
-        _hotkeys.Add(HK_TOGGLE_MODE, Settings.ToggleModeHotkey);
-        _hotkeys.Start();
 
         UpdateDisplay();
     }
 
     protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
     {
-        _hotkeys?.Dispose();
-        _hotkeys = null;
         if (_activeInstance == this) _activeInstance = null;
         _flipTimer?.Stop(); _flipTimer?.Dispose(); _flipTimer = null;
         base.OnDetachedFromVisualTree(e);
-    }
-
-    private void OnHotkey(int id)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            if (_activeInstance == null) return;
-            if (id == HK_PAGEUP) _activeInstance.Flip(-1);
-            else if (id == HK_PAGEDOWN) _activeInstance.Flip(+1);
-            else if (id == HK_TOGGLE_MODE) _activeInstance.ToggleMode();
-        });
     }
 
     public void Flip(int direction)

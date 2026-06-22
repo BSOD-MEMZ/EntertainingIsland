@@ -14,9 +14,6 @@
 
     <ScrollViewer>
         <StackPanel Classes="settings-container animated-intro">
-
-            <ci:IconText Glyph="&#xEF27;" Text="基本设置" Margin="0 0 0 4" />
-
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE9E4;}"
                                  Header="显示欢迎消息"
                                  Description="应用启动时在控制台输出欢迎信息。">
@@ -46,9 +43,6 @@
                     </StackPanel>
                 </StackPanel>
             </fa:SettingsExpander>
-
-            <Separator Margin="0 12 0 4" />
-            <ci:IconText Glyph="&#xE946;" Text="插件信息" Margin="0 0 0 4" />
 
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE946;}"
                                  Header="关于 EntertainingIsland">

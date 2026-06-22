@@ -32,18 +32,6 @@ public partial class SportsSettings : ObservableObject
     [ObservableProperty]
     private bool _detailedMode = true;
 
-    /// <summary>上翻快捷键</summary>
-    [ObservableProperty]
-    private HotkeyConfig _pageUpHotkey = new() { Ctrl = true, Shift = false, Key = "Left" };
-
-    /// <summary>下翻快捷键</summary>
-    [ObservableProperty]
-    private HotkeyConfig _pageDownHotkey = new() { Ctrl = true, Shift = false, Key = "Right" };
-
-    /// <summary>切换详细/简洁模式快捷键</summary>
-    [ObservableProperty]
-    private HotkeyConfig _toggleModeHotkey = new() { Ctrl = true, Shift = true, Key = "M" };
-
     /// <summary>联赛预设（TheSportsDB ID）。空字符串 = 全部联赛</summary>
     public static List<LeaguePreset> LeaguePresets { get; } = new()
     {

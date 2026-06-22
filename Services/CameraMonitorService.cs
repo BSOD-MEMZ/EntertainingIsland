@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Timers;
 using Avalonia.Threading;
 using ClassIsland.Shared;
@@ -11,9 +13,9 @@ using Timer = System.Timers.Timer;
 namespace EntertainingIsland.Services;
 
 /// <summary>
-/// 摄像头安全检测服务 — 轮询注册表和进程判断摄像头是否被占用，
-/// 通过 INotifyPropertyChanged 通知 UI 组件更新绿点指示器。
-/// 不发送任何通知（与 AntiMonitor 不同，已移除通知逻辑）。
+/// 跨平台摄像头安全检测服务。
+/// Windows: 轮询注册表和进程判断摄像头是否被占用。
+/// Linux: 检查 /dev/video* 设备是否被占用（通过 open() + EBUSY 检测）。
 /// </summary>
 public class CameraMonitorService : INotifyPropertyChanged, IDisposable
 {
@@ -67,7 +69,6 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
         if (_enabled)
             StartPolling();
 
-        // 监听设置变更
         settings.PropertyChanged += OnSettingsChanged;
     }
 
@@ -83,7 +84,7 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
         {
             Dispatcher.UIThread.Post(() =>
             {
-                if (_enabled) StartPolling(); // 重启定时器以应用新间隔
+                if (_enabled) StartPolling();
             });
         }
     }
@@ -110,9 +111,14 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
 
         try
         {
-            bool camReg = IsCapabilityInUse(WebcamRegPath);
-            bool camProc = IsCameraProcessRunning();
-            bool cameraInUse = camReg || camProc;
+            bool cameraInUse;
+
+            if (OperatingSystem.IsWindows())
+                cameraInUse = IsCameraInUseWindows();
+            else if (OperatingSystem.IsLinux())
+                cameraInUse = IsCameraInUseLinux();
+            else
+                return;
 
             IsCameraInUse = cameraInUse;
         }
@@ -121,8 +127,15 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
         }
     }
 
-    // ================ 摄像头检测：注册表 ================
+    // ==================== Windows 检测 ====================
 
+    [SupportedOSPlatform("windows")]
+    private static bool IsCameraInUseWindows()
+    {
+        return IsCapabilityInUse(WebcamRegPath) || IsCameraProcessRunning();
+    }
+
+    [SupportedOSPlatform("windows")]
     private static bool IsCapabilityInUse(string registrySubPath)
     {
         try
@@ -159,8 +172,7 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
         return 0;
     }
 
-    // ================ 摄像头检测：进程 ================
-
+    [SupportedOSPlatform("windows")]
     private static bool IsCameraProcessRunning()
     {
         try
@@ -169,6 +181,51 @@ public class CameraMonitorService : INotifyPropertyChanged, IDisposable
             {
                 proc.Dispose();
                 return true;
+            }
+        }
+        catch { }
+        return false;
+    }
+
+    // ==================== Linux 检测 ====================
+
+    // libc open/close
+    private const string Libc = "libc.so.6";
+    private const int O_RDWR = 2;
+    private const int O_NONBLOCK = 0x800;  // 2048 on most Linux
+    private const int EBUSY = 16;
+
+    [SupportedOSPlatform("linux")]
+    [DllImport(Libc, SetLastError = true)]
+    private static extern int open(string pathname, int flags);
+
+    [SupportedOSPlatform("linux")]
+    [DllImport(Libc)]
+    private static extern int close(int fd);
+
+    [SupportedOSPlatform("linux")]
+    private static bool IsCameraInUseLinux()
+    {
+        try
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                var path = $"/dev/video{i}";
+                if (!File.Exists(path)) continue;
+
+                // 以非阻塞读写模式尝试打开设备
+                int fd = open(path, O_RDWR | O_NONBLOCK);
+                if (fd >= 0)
+                {
+                    // 成功打开 → 设备存在且未被占用
+                    close(fd);
+                    continue;
+                }
+
+                // 打开失败 → 检查是否因为设备正被占用 (EBUSY)
+                int errno = Marshal.GetLastPInvokeError();
+                if (errno == EBUSY)
+                    return true;
             }
         }
         catch { }

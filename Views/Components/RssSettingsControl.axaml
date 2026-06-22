@@ -15,8 +15,6 @@
                   DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:RssSettingsControl}}">
         <StackPanel Classes="settings-container animated-intro">
 
-            <ci:IconText Glyph="&#xEEAD;" Text="RSS 源" Margin="0 0 0 4" />
-
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEEAD;}"
                                  Header="RSS 源"
                                  Description="输入 RSS/Atom 订阅地址，或从预设中选择。"
@@ -47,7 +45,6 @@
             </fa:SettingsExpander>
 
             <Separator Margin="0 12 0 4" />
-            <ci:IconText Glyph="&#xEEAD;" Text="显示设置" Margin="0 0 0 4" />
 
             <fa:SettingsExpander Header="轮播间隔"
                                  Description="每条新闻显示的秒数（2-120）。">
@@ -65,81 +62,6 @@
                                    Minimum="10" Maximum="200"
                                    Increment="10" Width="120" />
                 </fa:SettingsExpander.Footer>
-            </fa:SettingsExpander>
-
-            <Separator Margin="0 12 0 4" />
-            <ci:IconText Glyph="&#xE765;" Text="快捷键设置" Margin="0 0 0 4" />
-
-            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE765;}"
-                                 Header="快捷键设置"
-                                 Description="自定义 RSS 新闻的全局快捷键。"
-                                 IsExpanded="True">
-                <StackPanel Spacing="8" Margin="0,8,0,0">
-
-                    <!-- 上一条 -->
-                    <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE0AA;}"
-                                         Header="上一条"
-                                         Description="{Binding Settings.PageUpHotkey.DisplayString, StringFormat='当前：{0}'}"
-                                         IsExpanded="False">
-                        <StackPanel Spacing="8" Margin="0,8,0,0">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Ctrl}" Content="Ctrl" />
-                                <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Shift}" Content="Shift" />
-                                <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Alt}" Content="Alt" />
-                                <CheckBox IsChecked="{Binding Settings.PageUpHotkey.Win}" Content="Win" />
-                            </StackPanel>
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="主按键" FontSize="12" Opacity="0.7" />
-                                <ComboBox SelectedItem="{Binding Settings.PageUpHotkey.Key}"
-                                          Width="120"
-                                          ItemsSource="{Binding KeyOptions}" />
-                            </StackPanel>
-                        </StackPanel>
-                    </fa:SettingsExpander>
-
-                    <!-- 下一条 -->
-                    <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE0AB;}"
-                                         Header="下一条"
-                                         Description="{Binding Settings.PageDownHotkey.DisplayString, StringFormat='当前：{0}'}"
-                                         IsExpanded="False">
-                        <StackPanel Spacing="8" Margin="0,8,0,0">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Ctrl}" Content="Ctrl" />
-                                <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Shift}" Content="Shift" />
-                                <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Alt}" Content="Alt" />
-                                <CheckBox IsChecked="{Binding Settings.PageDownHotkey.Win}" Content="Win" />
-                            </StackPanel>
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="主按键" FontSize="12" Opacity="0.7" />
-                                <ComboBox SelectedItem="{Binding Settings.PageDownHotkey.Key}"
-                                          Width="120"
-                                          ItemsSource="{Binding KeyOptions}" />
-                            </StackPanel>
-                        </StackPanel>
-                    </fa:SettingsExpander>
-
-                    <!-- 打开链接 -->
-                    <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE71B;}"
-                                         Header="打开链接"
-                                         Description="{Binding Settings.OpenHotkey.DisplayString, StringFormat='当前：{0}'}"
-                                         IsExpanded="False">
-                        <StackPanel Spacing="8" Margin="0,8,0,0">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <CheckBox IsChecked="{Binding Settings.OpenHotkey.Ctrl}" Content="Ctrl" />
-                                <CheckBox IsChecked="{Binding Settings.OpenHotkey.Shift}" Content="Shift" />
-                                <CheckBox IsChecked="{Binding Settings.OpenHotkey.Alt}" Content="Alt" />
-                                <CheckBox IsChecked="{Binding Settings.OpenHotkey.Win}" Content="Win" />
-                            </StackPanel>
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="主按键" FontSize="12" Opacity="0.7" />
-                                <ComboBox SelectedItem="{Binding Settings.OpenHotkey.Key}"
-                                          Width="120"
-                                          ItemsSource="{Binding KeyOptions}" />
-                            </StackPanel>
-                        </StackPanel>
-                    </fa:SettingsExpander>
-
-                </StackPanel>
             </fa:SettingsExpander>
 
         </StackPanel>

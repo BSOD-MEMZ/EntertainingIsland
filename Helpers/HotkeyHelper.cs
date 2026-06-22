@@ -1,9 +1,12 @@
 using System;
+using System.Runtime.Versioning;
+using EntertainingIsland.Services;
 
 namespace EntertainingIsland.Helpers;
 
 /// <summary>
 /// 热键工具方法——统一所有组件中的 VkFromKey / FixKey 重复代码。
+/// 同时支持 Windows 虚拟键码和 Linux X11 KeySym/keycode。
 /// </summary>
 public static class HotkeyHelper
 {
@@ -51,5 +54,32 @@ public static class HotkeyHelper
             >= '0' and <= '9' => (uint)key[0],
             _ => 0
         };
+    }
+
+    // ==================== Linux X11 ====================
+
+    /// <summary>
+    /// 将按键名称转为 X11 KeySym 字符串，再通过 XKeysymToKeycode 转为 keycode。
+    /// 需要在持有 XOpenDisplay 返回的 display 指针时调用。
+    /// </summary>
+    [SupportedOSPlatform("linux")]
+    public static int X11KeycodeFromKey(IntPtr display, string key)
+    {
+        if (string.IsNullOrEmpty(key) || display == IntPtr.Zero) return 0;
+        key = key.ToUpperInvariant().Trim();
+
+        var keysymName = key switch
+        {
+            "LEFT" => "Left",
+            "RIGHT" => "Right",
+            "UP" => "Up",
+            "DOWN" => "Down",
+            "SPACE" => "space",
+            _ => key
+        };
+
+        var ks = NativeMethods.XStringToKeysym(keysymName);
+        if (ks == IntPtr.Zero) return 0;
+        return NativeMethods.XKeysymToKeycode(display, ks);
     }
 }
