@@ -53,4 +53,9 @@ public partial class Settings : ObservableObject
 
     [ObservableProperty]
     private LuckyPickerSettings _luckyPicker = new();
+
+    // ===== 功能开关 =====
+
+    [ObservableProperty]
+    private FeatureToggles _featureToggles = new();
 }

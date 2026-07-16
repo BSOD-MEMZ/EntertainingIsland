@@ -49,6 +49,7 @@ public class Plugin : PluginBase
         Settings.LuckyPicker ??= new();
         Settings.CameraMonitor ??= new();
         Settings.Fortune ??= new();
+        Settings.FeatureToggles ??= new();
 
         // 当设置发生变化时自动保存
         Settings.PropertyChanged += (sender, args) =>
@@ -62,92 +63,124 @@ public class Plugin : PluginBase
         // 点名器深层设置变更也要保存
         HookLuckyPickerSave(configPath);
 
+        // 功能开关深层变更也要保存
+        HookFeatureTogglesSave(configPath);
+
+        var ft = Settings.FeatureToggles;
+
         // 2. 注册全局娱乐状态（单例，被组件和服务共享）
         services.AddSingleton<EntertainmentState>();
 
         // 2b. 注册口头禅存储（单例，共享实例实现实时更新）
         services.AddSingleton(sp => new CatchphraseStore(PluginConfigFolder));
 
-        // 3. 注册 HTTP 通知提供程序
+        // 3. 注册 HTTP 通知提供程序（内部 REST 接口，无需在 ClassIsland UI 配置）
         services.AddNotificationProvider<HttpNotificationProvider>();
 
         // 3. 注册 HTTP 服务器（独立于通知提供程序，先启动监听）
         services.AddHostedService<HttpNotificationServer>();
 
         // 4. 注册全局热键警报服务（通知提供方，带提醒设置控件）
-        services.AddNotificationProvider<AlertHotkeyService, AlertHotkeySettingsControl>();
+        if (ft.AlertHotkey)
+            services.AddNotificationProvider<AlertHotkeyService, AlertHotkeySettingsControl>();
 
         // 4b. 注册下课倒计时提醒服务（通知提供方，带提醒设置控件）
-        services.AddNotificationProvider<ClassEndingReminderService, ClassEndingReminderSettingsControl>();
+        if (ft.ClassEndingReminder)
+            services.AddNotificationProvider<ClassEndingReminderService, ClassEndingReminderSettingsControl>();
 
         // 5. 注册小说阅读器组件（带设置面板）
-        services.AddComponent<NovelReaderComponent, NovelReaderSettingsControl>();
+        if (ft.NovelReader)
+            services.AddComponent<NovelReaderComponent, NovelReaderSettingsControl>();
 
         // 6. 注册口头禅记录组件（带设置面板）
-        services.AddComponent<CatchphraseComponent, CatchphraseComponentSettingsControl>();
+        if (ft.Catchphrase)
+            services.AddComponent<CatchphraseComponent, CatchphraseComponentSettingsControl>();
 
         // 6b. 注册头像课程表组件（带设置面板）
-        services.AddComponent<AvatarClassScheduleComponent, AvatarClassScheduleSettingsControl>();
+        if (ft.AvatarClassSchedule)
+            services.AddComponent<AvatarClassScheduleComponent, AvatarClassScheduleSettingsControl>();
 
         // 6c. 注册 RSS 新闻组件（带设置面板）
-        services.AddComponent<RssComponent, RssSettingsControl>();
+        if (ft.RssNews)
+            services.AddComponent<RssComponent, RssSettingsControl>();
 
         // 6d. 注册体育赛事组件（带设置面板）
-        services.AddComponent<SportsComponent, SportsSettingsControl>();
+        if (ft.Sports)
+            services.AddComponent<SportsComponent, SportsSettingsControl>();
 
         // 6e. 注册摄像头安全检测服务（单例）
         services.AddSingleton<CameraMonitorService>();
 
         // 6f. 注册摄像头安全指示器组件（带设置面板）
-        services.AddComponent<CameraStatusComponent, CameraMonitorSettingsControl>();
+        if (ft.CameraStatus)
+            services.AddComponent<CameraStatusComponent, CameraMonitorSettingsControl>();
 
         // 6g. 注册每日运势服务（单例）
         services.AddSingleton(sp => new FortuneService(Settings.Fortune));
 
         // 6h. 注册每日运势组件（带设置面板）
-        services.AddComponent<FortuneComponent, FortuneComponentSettingsControl>();
+        if (ft.Fortune)
+            services.AddComponent<FortuneComponent, FortuneComponentSettingsControl>();
 
         // 6i. 注册点名器服务（单例）
-        services.AddSingleton(sp => new LuckyPickerService(Settings.LuckyPicker));
+        if (ft.LuckyPicker)
+            services.AddSingleton(sp => new LuckyPickerService(Settings.LuckyPicker));
 
         // 6j. 注册点名器通知提供程序
-        services.AddNotificationProvider<LuckyPickerNotifier>();
-        // 额外注册为自身类型，以便 TryGetService 能解析（AddNotificationProvider 只注册为 IHostedService）
-        services.AddSingleton(sp => sp.GetServices<IHostedService>().OfType<LuckyPickerNotifier>().First());
+        if (ft.LuckyPicker && ft.LuckyPickerNotifier)
+        {
+            services.AddNotificationProvider<LuckyPickerNotifier>();
+            // 额外注册为自身类型，以便 TryGetService 能解析（AddNotificationProvider 只注册为 IHostedService）
+            services.AddSingleton(sp => sp.GetServices<IHostedService>().OfType<LuckyPickerNotifier>().First());
+        }
 
         // 7. 注册 ClassIsland 自动化行动（可在自动化规则中使用）
 
         // 全局组件显隐
-        services.AddAction<ToggleAllVisibilityAction>();
-        services.AddAction<ShowAllComponentsAction>();
-        services.AddAction<HideAllComponentsAction>();
+        if (ft.ToggleVisibility) services.AddAction<ToggleAllVisibilityAction>();
+        if (ft.ShowAllComponents) services.AddAction<ShowAllComponentsAction>();
+        if (ft.HideAllComponents) services.AddAction<HideAllComponentsAction>();
 
         // 小说阅读器
-        services.AddAction<NovelPauseAction>();
-        services.AddAction<NovelResumeAction>();
-        services.AddAction<NovelNextPageAction>();
-        services.AddAction<NovelPrevPageAction>();
-        services.AddAction<NovelRestartAction>();
+        if (ft.NovelActions)
+        {
+            services.AddAction<NovelPauseAction>();
+            services.AddAction<NovelResumeAction>();
+            services.AddAction<NovelNextPageAction>();
+            services.AddAction<NovelPrevPageAction>();
+            services.AddAction<NovelRestartAction>();
+        }
 
         // RSS 新闻
-        services.AddAction<RssNextAction>();
-        services.AddAction<RssPrevAction>();
+        if (ft.RssActions)
+        {
+            services.AddAction<RssNextAction>();
+            services.AddAction<RssPrevAction>();
+        }
 
         // 口头禅
-        services.AddAction<CatchphraseClearAction>();
+        if (ft.CatchphraseClearAction)
+            services.AddAction<CatchphraseClearAction>();
 
         // 摄像头监控 Actions
-        services.AddAction<ToggleCameraMonitorAction>();
-        services.AddAction<EnableCameraMonitorAction>();
-        services.AddAction<DisableCameraMonitorAction>();
+        if (ft.CameraActions)
+        {
+            services.AddAction<ToggleCameraMonitorAction>();
+            services.AddAction<EnableCameraMonitorAction>();
+            services.AddAction<DisableCameraMonitorAction>();
+        }
 
         // 摄像头监控 Triggers（"当事件触发时"）
-        services.AddTrigger<CameraInUseTrigger>();
-        services.AddTrigger<CameraStoppedTrigger>();
+        if (ft.CameraTriggers)
+        {
+            services.AddTrigger<CameraInUseTrigger>();
+            services.AddTrigger<CameraStoppedTrigger>();
+        }
 
         // 8. 注册设置页面
         services.AddSettingsPage<MySettingsPage>();
-        services.AddSettingsPage<LuckyPickerSettingsPage>();
+        if (ft.LuckyPicker)
+            services.AddSettingsPage<LuckyPickerSettingsPage>();
         // Fortune 和 CameraMonitor 已注册为组件，不再在侧边栏显示设置
         // services.AddSettingsPage<FortuneSettingsPage>();
         // services.AddSettingsPage<CameraMonitorSettingsPage>();
@@ -169,7 +202,7 @@ public class Plugin : PluginBase
             // 7b. 创建点名器屏幕浮窗
             try
             {
-                if (Settings.LuckyPicker.IsEnabled)
+                if (ft.LuckyPicker && Settings.LuckyPicker.IsEnabled)
                 {
                     var luckySettings = Settings.LuckyPicker;
                     var service = IAppHost.TryGetService<LuckyPickerService>();
@@ -250,6 +283,14 @@ public class Plugin : PluginBase
     private void HookLuckyPickerSave(string configPath)
     {
         Settings.LuckyPicker.PropertyChanged += (_, _) =>
+        {
+            ConfigureFileHelper.SaveConfig(configPath, Settings);
+        };
+    }
+
+    private void HookFeatureTogglesSave(string configPath)
+    {
+        Settings.FeatureToggles.PropertyChanged += (_, _) =>
         {
             ConfigureFileHelper.SaveConfig(configPath, Settings);
         };

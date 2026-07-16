@@ -44,6 +44,50 @@
                 </StackPanel>
             </fa:SettingsExpander>
 
+            <!-- ===== 功能开关 ===== -->
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE91C;}"
+                                 Header="功能开关"
+                                 Description="启用/禁用各功能模块。关闭后需重启 ClassIsland 生效。"
+                                 IsExpanded="True">
+                <StackPanel Spacing="4" Margin="0,8,0,0">
+
+                    <!-- 完整功能模块 -->
+                    <TextBlock Text="完整功能模块" FontWeight="Bold" FontSize="13" Margin="0,0,0,4" />
+                    <ToggleSwitch IsChecked="{Binding Ft.LuckyPicker}" OffContent="点名器（设置页+浮窗+通知+服务）" OnContent="点名器（设置页+浮窗+通知+服务）" />
+
+                    <!-- 组件 -->
+                    <TextBlock Text="组件" FontWeight="Bold" FontSize="13" Margin="0,8,0,4" />
+                    <ToggleSwitch IsChecked="{Binding Ft.NovelReader}" OffContent="小说阅读器" OnContent="小说阅读器" />
+                    <ToggleSwitch IsChecked="{Binding Ft.Catchphrase}" OffContent="口头禅记录" OnContent="口头禅记录" />
+                    <ToggleSwitch IsChecked="{Binding Ft.AvatarClassSchedule}" OffContent="头像课程表" OnContent="头像课程表" />
+                    <ToggleSwitch IsChecked="{Binding Ft.RssNews}" OffContent="RSS 新闻" OnContent="RSS 新闻" />
+                    <ToggleSwitch IsChecked="{Binding Ft.Sports}" OffContent="体育赛事" OnContent="体育赛事" />
+                    <ToggleSwitch IsChecked="{Binding Ft.CameraStatus}" OffContent="摄像头安全指示器" OnContent="摄像头安全指示器" />
+                    <ToggleSwitch IsChecked="{Binding Ft.Fortune}" OffContent="每日运势" OnContent="每日运势" />
+
+                    <!-- 提醒提供方 -->
+                    <TextBlock Text="提醒提供方" FontWeight="Bold" FontSize="13" Margin="0,12,0,4" />
+                    <ToggleSwitch IsChecked="{Binding Ft.AlertHotkey}" OffContent="防巡堂热键警报" OnContent="防巡堂热键警报" />
+                    <ToggleSwitch IsChecked="{Binding Ft.ClassEndingReminder}" OffContent="下课倒计时提醒" OnContent="下课倒计时提醒" />
+                    <ToggleSwitch IsChecked="{Binding Ft.LuckyPickerNotifier}" OffContent="点名器通知" OnContent="点名器通知" />
+
+                    <!-- 自动化行动 -->
+                    <TextBlock Text="自动化行动" FontWeight="Bold" FontSize="13" Margin="0,12,0,4" />
+                    <ToggleSwitch IsChecked="{Binding Ft.ToggleVisibility}" OffContent="切换所有组件显隐" OnContent="切换所有组件显隐" />
+                    <ToggleSwitch IsChecked="{Binding Ft.ShowAllComponents}" OffContent="显示所有组件" OnContent="显示所有组件" />
+                    <ToggleSwitch IsChecked="{Binding Ft.HideAllComponents}" OffContent="隐藏所有组件" OnContent="隐藏所有组件" />
+                    <ToggleSwitch IsChecked="{Binding Ft.NovelActions}" OffContent="小说阅读器控制（暂停/翻页等）" OnContent="小说阅读器控制（暂停/翻页等）" />
+                    <ToggleSwitch IsChecked="{Binding Ft.RssActions}" OffContent="RSS 新闻翻页" OnContent="RSS 新闻翻页" />
+                    <ToggleSwitch IsChecked="{Binding Ft.CatchphraseClearAction}" OffContent="口头禅清零" OnContent="口头禅清零" />
+                    <ToggleSwitch IsChecked="{Binding Ft.CameraActions}" OffContent="摄像头监控控制（切换/启/停）" OnContent="摄像头监控控制（切换/启/停）" />
+
+                    <!-- 自动化触发器 -->
+                    <TextBlock Text="自动化触发器" FontWeight="Bold" FontSize="13" Margin="0,12,0,4" />
+                    <ToggleSwitch IsChecked="{Binding Ft.CameraTriggers}" OffContent="摄像头使用/停止事件触发" OnContent="摄像头使用/停止事件触发" />
+
+                </StackPanel>
+            </fa:SettingsExpander>
+
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE946;}"
                                  Header="关于 EntertainingIsland">
                 <TextBlock Text="{Binding PluginInfoText}" 

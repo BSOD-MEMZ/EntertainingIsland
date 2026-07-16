@@ -5,7 +5,7 @@ using ClassIsland.Shared;
 
 namespace EntertainingIsland.Services.Automation;
 
-[ActionInfo("entertainingisland.hide-all", "隐藏所有组件", "\uE817", defaultGroupToMenu: "EntertainingIsland")]
+[ActionInfo("entertainingisland.hide-all", "隐藏所有组件", "\uE817", defaultGroupToMenu: "EntertainingIsland/全局显隐")]
 public class HideAllComponentsAction : ActionBase
 {
     protected override Task OnInvoke()

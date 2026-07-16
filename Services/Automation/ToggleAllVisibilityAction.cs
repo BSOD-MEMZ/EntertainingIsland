@@ -5,7 +5,7 @@ using ClassIsland.Shared;
 
 namespace EntertainingIsland.Services.Automation;
 
-[ActionInfo("entertainingisland.toggle-all", "切换所有组件显隐", "\uF367", defaultGroupToMenu: "EntertainingIsland")]
+[ActionInfo("entertainingisland.toggle-all", "切换所有组件显隐", "\uF367", defaultGroupToMenu: "EntertainingIsland/全局显隐")]
 public class ToggleAllVisibilityAction : ActionBase
 {
     protected override Task OnInvoke()

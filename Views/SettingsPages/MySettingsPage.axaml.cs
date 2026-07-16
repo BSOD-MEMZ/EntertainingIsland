@@ -19,6 +19,7 @@ public partial class MySettingsPage : SettingsPageBase
 {
     private Plugin PluginEntry => IAppHost.GetService<Plugin>();
     public Settings Settings => PluginEntry.Settings;
+    public FeatureToggles Ft => Settings.FeatureToggles;
 
     public static List<string> KeyOptions { get; } = new()
     {

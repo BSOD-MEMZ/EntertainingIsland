@@ -9,9 +9,23 @@ $ErrorActionPreference = 'Stop'
 $pluginProject = $PSScriptRoot
 $pluginOutput = "$pluginProject\bin\Debug"
 $classIslandApp = "d:\EntertainingIsland\ClassIsland_App"
-$pluginInstallDir = "$classIslandApp\data\Plugins\entertainingisland.app"  # 对应 manifest.yml 中的 id
+$pluginInstallDir = "d:\EntertainingIsland\data\Plugins\entertainingisland.app"  # PackageType=folder, AppRoot=data
 
 Write-Host "=== ClassIsland 插件部署脚本 ===" -ForegroundColor Cyan
+
+# 0. 关闭已运行的 ClassIsland
+Write-Host "`n🛑 正在关闭已有的 ClassIsland 进程..." -ForegroundColor Yellow
+$processes = Get-Process -Name "ClassIsland*" -ErrorAction SilentlyContinue
+if ($processes) {
+    $processes | ForEach-Object {
+        Write-Host "   终止: $($_.ProcessName) (PID: $($_.Id))"
+        $_.Kill()
+    }
+    Start-Sleep -Seconds 2
+    Write-Host "✅ 已关闭旧进程" -ForegroundColor Green
+} else {
+    Write-Host "   没有运行中的 ClassIsland 进程"
+}
 
 # 1. 构建插件
 Write-Host "`n🔨 正在构建插件..." -ForegroundColor Yellow
@@ -42,7 +56,7 @@ if ($Debug) {
     Write-Host "   请在 IDE 中附加调试器或使用热重载。" -ForegroundColor DarkGray
 }
 
-$classIslandExe = "$classIslandApp\ClassIsland.exe"
+$classIslandExe = "$classIslandApp\ClassIsland.Desktop.exe"
 if (Test-Path $classIslandExe) {
     Write-Host "`n🚀 启动 ClassIsland..." -ForegroundColor Green
     Start-Process $classIslandExe

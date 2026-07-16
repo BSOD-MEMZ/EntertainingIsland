@@ -6,7 +6,7 @@ using EntertainingIsland.Services;
 
 namespace EntertainingIsland.Services.Automation;
 
-[ActionInfo("entertainingisland.camera-monitor.enable", "启用摄像头监控", "\uE392", defaultGroupToMenu: "EntertainingIsland")]
+[ActionInfo("entertainingisland.camera-monitor.enable", "启用摄像头监控", "\uE392", defaultGroupToMenu: "EntertainingIsland/摄像头监控")]
 public class EnableCameraMonitorAction : ActionBase
 {
     protected override Task OnInvoke()
