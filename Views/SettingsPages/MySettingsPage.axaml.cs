@@ -31,12 +31,9 @@ public partial class MySettingsPage : SettingsPageBase
     };
 
     public string PluginInfoText =>
-        $"名称: EntertainingIsland\n" +
-        $"ID: {PluginEntry.Info.Manifest.Id}\n" +
+        $"EntertainingIsland\n" +
         $"版本: {PluginEntry.Info.Manifest.Version}\n" +
-        $"功能: 防巡堂警报 · 小说阅读器 · 口头禅记录 · RSS 新闻 · 头像课程表 · 点名器 · 体育赛事 · 下课倒计时 · 摄像头安全 · 每日运势\n" +
-        $"安全键: {PluginEntry.Settings.DismissHotkey.DisplayString}（消警+隐藏/显示所有组件）\n" +
-        $"自动化: 14 个 ClassIsland 行动 + 2 个触发器";
+        $"2026 xxtsoft 对一切提前开学&违规补课等行为致以最强烈的谴责";
 
     public MySettingsPage()
     {

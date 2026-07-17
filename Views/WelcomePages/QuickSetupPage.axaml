@@ -7,14 +7,14 @@
              x:Class="EntertainingIsland.Views.WelcomePages.QuickSetupPage">
     <Grid RowDefinitions="Auto, *, Auto" Margin="32,16">
         <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,16">
-            <TextBlock Text="⚙️ 快速设置" FontSize="24" FontWeight="SemiBold" />
+            <TextBlock Text="快速设置" FontSize="24" FontWeight="SemiBold" />
             <TextBlock Text="选择你想要启用的功能，之后可在插件设置中随时更改。" FontSize="14" Opacity="0.6" TextWrapping="Wrap" />
         </StackPanel>
 
         <ScrollViewer Grid.Row="1">
             <StackPanel Spacing="8">
             <fa:SettingsExpander Header="防巡堂警报"
-                                 Description="按下热键立即弹出全屏警告。"
+                                 Description="按下热键弹出全屏提醒窗外有老师视奸。"
                                  IconSource="{x:Null}">
                 <fa:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding EnableAlertHotkey}" />
@@ -38,7 +38,7 @@
             </fa:SettingsExpander>
 
             <fa:SettingsExpander Header="口头禅记录"
-                                 Description="记录老师经典语录并计数。"
+                                 Description="记录老师口头禅次数，支持语音识别。"
                                  IconSource="{x:Null}">
                 <fa:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding EnableCatchphrase}" />
@@ -46,7 +46,7 @@
             </fa:SettingsExpander>
 
             <fa:SettingsExpander Header="体育赛事"
-                                 Description="显示 NBA / 英超 / 西甲实时比分。"
+                                 Description="显示 NBA / 英超 / 西甲等实时比分。"
                                  IconSource="{x:Null}">
                 <fa:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding EnableSports}" />
@@ -54,7 +54,7 @@
             </fa:SettingsExpander>
 
             <fa:SettingsExpander Header="全局安全键"
-                                 Description="一键消警并隐藏所有娱乐组件，再按恢复。"
+                                 Description="老师突然出现时，立即按下全局安全键（默认 Ctrl+Shift+K），所有娱乐组件瞬间隐藏，再按一次恢复。"
                                  IconSource="{x:Null}"
                                  IsExpanded="False">
                 <StackPanel Spacing="8" Margin="0,8,0,0">

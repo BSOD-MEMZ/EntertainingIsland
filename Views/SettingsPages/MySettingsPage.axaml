@@ -14,13 +14,14 @@
 
     <ScrollViewer>
         <StackPanel Classes="settings-container animated-intro">
+        <!-- 
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE9E4;}"
                                  Header="显示欢迎消息"
                                  Description="应用启动时在控制台输出欢迎信息。">
                 <fa:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.ShowWelcomeMessage}" />
                 </fa:SettingsExpander.Footer>
-            </fa:SettingsExpander>
+            </fa:SettingsExpander> -->
 
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE671;}"
                                  Header="全局安全键"
@@ -45,7 +46,7 @@
             </fa:SettingsExpander>
 
             <!-- ===== 功能开关 ===== -->
-            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE91C;}"
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xEDE9;}"
                                  Header="功能开关"
                                  Description="启用/禁用各功能模块。关闭后需重启 ClassIsland 生效。"
                                  IsExpanded="True">
@@ -88,14 +89,14 @@
                 </StackPanel>
             </fa:SettingsExpander>
 
-            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE71B;}"
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE0B3;}"
                                  Header="欢迎向导"
                                  Description="重新运行 EntertainingIsland 的首次设置向导。">
                 <Button Content="重新运行欢迎向导" Click="ButtonReRunOobe_OnClick"
                         Margin="0,8,0,0" />
             </fa:SettingsExpander>
 
-            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE946;}"
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE0C1;}"
                                  Header="关于 EntertainingIsland">
                 <TextBlock Text="{Binding PluginInfoText}" 
                            Opacity="0.7"

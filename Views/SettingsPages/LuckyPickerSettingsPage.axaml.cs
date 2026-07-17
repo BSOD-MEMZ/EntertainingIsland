@@ -130,7 +130,7 @@ public partial class LuckyPickerSettingsPage : SettingsPageBase
 
             var header = new TextBlock
             {
-                Text = $"👤 {entry.Name}",
+                Text = $"{entry.Name}",
                 FontSize = 13,
                 FontWeight = Avalonia.Media.FontWeight.Bold
             };
