@@ -19,6 +19,7 @@ namespace EntertainingIsland.Views.WelcomePages;
 public partial class IntroPage : UserControl, IWelcomePage
 {
     public WelcomeViewModel ViewModel { get; set; } = null!;
+    private static bool _hasPlayed;
 
     public IntroPage() { InitializeComponent(); }
 
@@ -31,6 +32,34 @@ public partial class IntroPage : UserControl, IWelcomePage
             if (plugin != null) { var p = Path.Combine(plugin.Info.PluginFolderPath, "icon.png"); if (File.Exists(p)) AppIcon.Source = new Bitmap(p); }
         }
         catch { }
+
+        if (_hasPlayed)
+        {
+            try
+            {
+                Classes.Add("anim-zoom");
+                if (AppIcon != null)
+                {
+                    AppIcon.Opacity = 1;
+                    var scale = AppIcon.RenderTransform as ScaleTransform;
+                    if (scale != null) { scale.ScaleX = 1; scale.ScaleY = 1; }
+                }
+                if (LettersPanel != null)
+                {
+                    foreach (var t in LettersPanel.Children.OfType<TextBlock>())
+                    {
+                        t.Opacity = 1;
+                        var tt = t.RenderTransform as TranslateTransform;
+                        if (tt != null) tt.Y = 0;
+                    }
+                }
+                if (SubtitleText != null) SubtitleText.Opacity = 1;
+                return;
+            }
+            catch { /* fall through to replay */ }
+        }
+
+        _hasPlayed = true;
         _ = PlayAnimationAsync();
     }
 

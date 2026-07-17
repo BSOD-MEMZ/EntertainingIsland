@@ -60,7 +60,7 @@
                        FontSize="15" HorizontalAlignment="Center" Margin="0,12,0,0"
                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
             <Button Grid.Row="4" HorizontalAlignment="Center"
-                    Content="{ci:FluentIcon &#xE130;, FontSize=20}"
+                    Content="{ci:FluentIcon &#xE131;, FontSize=20}"
                     Width="52" Height="52" CornerRadius="26" Classes="accent"
                     ToolTip.Tip="开始设置" Click="ButtonNext_OnClick" Margin="0,28,0,0"/>
         </Grid>

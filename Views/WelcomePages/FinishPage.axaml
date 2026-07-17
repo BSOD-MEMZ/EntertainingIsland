@@ -20,11 +20,16 @@
         </Style>
     </UserControl.Styles>
     <Grid x:Name="Root" Opacity="0">
+        <!-- Banner as background texture, top-aligned, full width -->
+        <Image x:Name="BannerImage" Stretch="UniformToFill"
+               VerticalAlignment="Top" HorizontalAlignment="Stretch"
+               Opacity="0.3"/>
+        <!-- Content centered on top -->
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
-            <ci:FluentIcon Glyph="&#xE91C;" FontSize="48" HorizontalAlignment="Center" Foreground="{DynamicResource SystemAccentColorBrush}" />
+            <ci:FluentIcon Glyph="&#xE73E;" FontSize="48" HorizontalAlignment="Center" Foreground="{DynamicResource SystemAccentColorBrush}" />
             <TextBlock Text="一切就绪！" FontSize="28" FontWeight="SemiBold" HorizontalAlignment="Center" />
             <TextBlock Text="EntertainingIsland 已完成设置，祝你在学校玩得开心！" FontSize="14" Opacity="0.6" HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="400" TextAlignment="Center" />
-            <TextBlock Text="⚡ 小提示：按下你设置的安全键可随时隐藏所有娱乐组件" FontSize="12" Opacity="0.4" HorizontalAlignment="Center" />
+            <TextBlock Text="小提示：按下你设置的安全键可随时隐藏所有娱乐组件" FontSize="12" Opacity="0.4" HorizontalAlignment="Center" />
             <Button Content="开始使用" HorizontalAlignment="Center"
                     Classes="accent"
                     Width="160" Height="40"
