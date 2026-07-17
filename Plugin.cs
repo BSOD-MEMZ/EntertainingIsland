@@ -246,6 +246,23 @@ public class Plugin : PluginBase
                 Console.WriteLine($"  ID: {Info.Manifest.Id}");
                 Console.WriteLine($"  版本: {Info.Manifest.Version}");
             }
+
+            // 7e. 首次启动显示 OOBE 欢迎向导
+            if (!Settings.HasSeenWelcome)
+            {
+                try
+                {
+                    var parent = AppBase.Current.MainWindow ?? AppBase.Current.GetRootWindow();
+                    var welcomeWindow = new WelcomeWindow();
+                    welcomeWindow.ShowDialog(parent);
+                    Console.WriteLine("[EntertainingIsland] 首次启动，已显示欢迎向导");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[EntertainingIsland] 欢迎向导启动失败: {ex.Message}");
+                    Settings.HasSeenWelcome = true;
+                }
+            }
         };
     }
 
@@ -294,5 +311,13 @@ public class Plugin : PluginBase
         {
             ConfigureFileHelper.SaveConfig(configPath, Settings);
         };
+    }
+
+    /// <summary>公开的静态方法，用于在任何地方触发 OOBE 欢迎向导（例如设置页按钮）</summary>
+    public static void ShowWelcomeWizard()
+    {
+        var parent = AppBase.Current.MainWindow ?? AppBase.Current.GetRootWindow();
+        var window = new WelcomeWindow();
+        window.ShowDialog(parent);
     }
 }

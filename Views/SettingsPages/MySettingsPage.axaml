@@ -88,6 +88,13 @@
                 </StackPanel>
             </fa:SettingsExpander>
 
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE71B;}"
+                                 Header="欢迎向导"
+                                 Description="重新运行 EntertainingIsland 的首次设置向导。">
+                <Button Content="重新运行欢迎向导" Click="ButtonReRunOobe_OnClick"
+                        Margin="0,8,0,0" />
+            </fa:SettingsExpander>
+
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE946;}"
                                  Header="关于 EntertainingIsland">
                 <TextBlock Text="{Binding PluginInfoText}" 

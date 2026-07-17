@@ -1,0 +1,115 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ci="http://classisland.tech/schemas/xaml/core"
+             xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
+             x:Class="EntertainingIsland.Views.WelcomePages.FeaturesPage">
+    <Grid RowDefinitions="Auto, *, Auto" Margin="32,16">
+        <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,16">
+            <TextBlock Text="欢迎使用 EntertainingIsland！" FontSize="24" FontWeight="SemiBold" />
+            <TextBlock Text="这是一个功能丰富的 ClassIsland 娱乐插件，以下是所有可用功能：" FontSize="14" Opacity="0.6" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <WrapPanel>
+                <Border Classes="card" Padding="14" Width="200" Height="100" Margin="0,0,12,12">
+                    <StackPanel Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ci:FluentIcon Glyph="&#xE72E;" FontSize="16" />
+                            <TextBlock Text="防巡堂警报" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="按下热键弹出全屏提醒" FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="card" Padding="14" Width="200" Height="100" Margin="0,0,12,12">
+                    <StackPanel Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ci:FluentIcon Glyph="&#xE8A5;" FontSize="16" />
+                            <TextBlock Text="小说阅读器" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="在课表上偷偷看 txt 小说" FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="card" Padding="14" Width="200" Height="100" Margin="0,0,12,12">
+                    <StackPanel Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ci:FluentIcon Glyph="&#xE8F4;" FontSize="16" />
+                            <TextBlock Text="口头禅记录" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="一键 +1 老师经典语录" FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="card" Padding="14" Width="200" Height="100" Margin="0,0,12,12">
+                    <StackPanel Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ci:FluentIcon Glyph="&#xE8F1;" FontSize="16" />
+                            <TextBlock Text="RSS 新闻" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="课表上滚动显示新闻标题" FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="card" Padding="14" Width="200" Height="100" Margin="0,0,12,12">
+                    <StackPanel Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ci:FluentIcon Glyph="&#xE77B;" FontSize="16" />
+                            <TextBlock Text="头像课程表" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="老师头像+科目图标展示" FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="card" Padding="14" Width="200" Height="100" Margin="0,0,12,12">
+                    <StackPanel Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ci:FluentIcon Glyph="&#xE716;" FontSize="16" />
+                            <TextBlock Text="点名器" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="随机抽人，支持加权爆率" FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="card" Padding="14" Width="200" Height="100" Margin="0,0,12,12">
+                    <StackPanel Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ci:FluentIcon Glyph="&#xE7E7;" FontSize="16" />
+                            <TextBlock Text="体育赛事" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="NBA/英超/西甲实时比分" FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="card" Padding="14" Width="200" Height="100" Margin="0,0,12,12">
+                    <StackPanel Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ci:FluentIcon Glyph="&#xE8D6;" FontSize="16" />
+                            <TextBlock Text="每日运势" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="每日宜忌运势指南" FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="card" Padding="14" Width="200" Height="100" Margin="0,0,12,12">
+                    <StackPanel Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ci:FluentIcon Glyph="&#xE392;" FontSize="16" />
+                            <TextBlock Text="摄像头安全" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="摄像头调用时绿色提醒" FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+                <Border Classes="card" Padding="14" Width="200" Height="100" Margin="0,0,12,12">
+                    <StackPanel Spacing="6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ci:FluentIcon Glyph="&#xE121;" FontSize="16" />
+                            <TextBlock Text="下课倒计时" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="下课前一比一照搬提醒" FontSize="12" Opacity="0.6" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+            </WrapPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,16,0,0">
+            <Button Content="上一步" Click="ButtonBack_OnClick" />
+            <Button Content="下一步" Classes="accent" Click="ButtonNext_OnClick" />
+        </StackPanel>
+    </Grid>
+</UserControl>

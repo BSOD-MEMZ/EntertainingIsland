@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Avalonia.Interactivity;
 using ClassIsland.Core;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
@@ -41,5 +42,10 @@ public partial class MySettingsPage : SettingsPageBase
     {
         InitializeComponent();
         DataContext = this;
+    }
+
+    private void ButtonReRunOobe_OnClick(object? sender, RoutedEventArgs e)
+    {
+        Plugin.ShowWelcomeWizard();
     }
 }

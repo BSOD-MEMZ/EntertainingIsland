@@ -1,4 +1,4 @@
-# ClassIsland 插件部署和调试脚本
+# ClassIsland 插件部署和调试脚本 
 # 用法: .\deploy.ps1 [-Debug]
 
 param([switch]$Debug)

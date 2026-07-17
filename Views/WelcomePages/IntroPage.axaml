@@ -1,0 +1,68 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ci="http://classisland.tech/schemas/xaml/core"
+             xmlns:local="clr-namespace:EntertainingIsland.Views.WelcomePages"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
+             x:Class="EntertainingIsland.Views.WelcomePages.IntroPage"
+             Opacity="0">
+    <UserControl.RenderTransform><ScaleTransform/></UserControl.RenderTransform>
+    <UserControl.Styles>
+        <Style Selector="local|IntroPage.anim-zoom">
+            <Style.Animations>
+                <Animation Duration="0:0:6.0" Easing="0.00, 0.83, 0.17, 0.90" FillMode="Both">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.25"/>
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.25"/>
+                        <Setter Property="Opacity" Value="0.0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.0"/>
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.0"/>
+                        <Setter Property="Opacity" Value="1.0"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Image#AppIcon">
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="RenderTransform"><ScaleTransform/></Setter>
+        </Style>
+        <Style Selector="TextBlock.letter">
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="FontSize" Value="36"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <Setter Property="MinWidth" Value="32"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="RenderTransform"><TranslateTransform Y="40"/></Setter>
+        </Style>
+    </UserControl.Styles>
+    <ScrollViewer>
+        <Grid RowDefinitions="*, Auto, Auto, Auto, Auto, *">
+            <Image Grid.Row="1" x:Name="AppIcon" Height="72" Width="72"
+                   HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,16"/>
+            <StackPanel Grid.Row="2" x:Name="LettersPanel" Orientation="Horizontal"
+                        HorizontalAlignment="Center" Margin="0,8,0,0">
+                <TextBlock Classes="letter" Text="E"/><TextBlock Classes="letter" Text="n"/>
+                <TextBlock Classes="letter" Text="t"/><TextBlock Classes="letter" Text="e"/>
+                <TextBlock Classes="letter" Text="r"/><TextBlock Classes="letter" Text="t"/>
+                <TextBlock Classes="letter" Text="a"/><TextBlock Classes="letter" Text="i"/>
+                <TextBlock Classes="letter" Text="n"/><TextBlock Classes="letter" Text="i"/>
+                <TextBlock Classes="letter" Text="n"/><TextBlock Classes="letter" Text="g"/>
+                <TextBlock Classes="letter" Text="I"/><TextBlock Classes="letter" Text="s"/>
+                <TextBlock Classes="letter" Text="l"/><TextBlock Classes="letter" Text="a"/>
+                <TextBlock Classes="letter" Text="n"/><TextBlock Classes="letter" Text="d"/>
+            </StackPanel>
+            <TextBlock Grid.Row="3" x:Name="SubtitleText" Opacity="0"
+                       Text="让同学眼前一亮，老师眼前一黑"
+                       FontSize="15" HorizontalAlignment="Center" Margin="0,12,0,0"
+                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <Button Grid.Row="4" HorizontalAlignment="Center"
+                    Content="{ci:FluentIcon &#xE130;, FontSize=20}"
+                    Width="52" Height="52" CornerRadius="26" Classes="accent"
+                    ToolTip.Tip="开始设置" Click="ButtonNext_OnClick" Margin="0,28,0,0"/>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

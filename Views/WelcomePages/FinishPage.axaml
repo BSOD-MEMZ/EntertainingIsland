@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ci="http://classisland.tech/schemas/xaml/core"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
+             x:Class="EntertainingIsland.Views.WelcomePages.FinishPage">
+    <UserControl.Styles>
+        <Style Selector="Grid#Root.anim">
+            <Style.Animations>
+                <Animation Duration="0:0:0.5" FillMode="Both">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </UserControl.Styles>
+    <Grid x:Name="Root" Opacity="0">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
+            <ci:FluentIcon Glyph="&#xE91C;" FontSize="48" HorizontalAlignment="Center" Foreground="{DynamicResource SystemAccentColorBrush}" />
+            <TextBlock Text="一切就绪！" FontSize="28" FontWeight="SemiBold" HorizontalAlignment="Center" />
+            <TextBlock Text="EntertainingIsland 已完成设置，祝你在学校玩得开心！" FontSize="14" Opacity="0.6" HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="400" TextAlignment="Center" />
+            <TextBlock Text="⚡ 小提示：按下你设置的安全键可随时隐藏所有娱乐组件" FontSize="12" Opacity="0.4" HorizontalAlignment="Center" />
+            <Button Content="开始使用" HorizontalAlignment="Center"
+                    Classes="accent"
+                    Width="160" Height="40"
+                    CornerRadius="20"
+                    Margin="0,16,0,0"
+                    Click="ButtonFinish_OnClick" />
+        </StackPanel>
+    </Grid>
+</UserControl>

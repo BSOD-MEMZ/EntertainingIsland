@@ -8,6 +8,10 @@ public partial class Settings : ObservableObject
     [ObservableProperty]
     private bool _showWelcomeMessage = true;
 
+    /// <summary>是否已完成首次欢迎向导</summary>
+    [ObservableProperty]
+    private bool _hasSeenWelcome = false;
+
     // ===== 全局安全键 =====
 
     /// <summary>全局安全键：消警 + 隐藏/显示所有娱乐组件，默认 Ctrl+Shift+K</summary>
