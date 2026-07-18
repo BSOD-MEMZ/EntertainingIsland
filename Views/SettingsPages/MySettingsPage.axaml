@@ -96,6 +96,14 @@
                         Margin="0,8,0,0" />
             </fa:SettingsExpander>
 
+            <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE61C;}"
+                                 Header="清除数据"
+                                 Description="删除所有设置和缓存文件，恢复为全新安装状态。此操作不可撤销。">
+                <Button Content="清除所有数据" Click="ButtonClearData_OnClick"
+                        Margin="0,8,0,0"
+                        Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+            </fa:SettingsExpander>
+
             <fa:SettingsExpander IconSource="{ci:FluentIconSource &#xE0C1;}"
                                  Header="关于 EntertainingIsland">
                 <TextBlock Text="{Binding PluginInfoText}" 

@@ -1,8 +1,10 @@
+using System.IO;
 using ClassIsland.Core;
 using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Extensions.Registry;
 using ClassIsland.Shared;
+using ClassIsland.Shared.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EntertainingIsland.Models;
@@ -13,8 +15,6 @@ using EntertainingIsland.Views;
 using EntertainingIsland.Views.Components;
 using EntertainingIsland.Views.NotificationProviders;
 using EntertainingIsland.Views.SettingsPages;
-using System.IO;
-using ClassIsland.Shared.Helpers;
 
 namespace EntertainingIsland;
 
@@ -31,6 +31,9 @@ public class Plugin : PluginBase
 
     /// <summary>点名器浮窗引用（防止 GC）</summary>
     private LuckyPickerWindow? _luckyPickerWindow;
+
+    /// <summary>OOBE 是否启用声音（由首次启动对话框决定）</summary>
+    public static bool OobeSoundEnabled { get; set; } = true;
 
     /// <summary>
     /// 插件初始化方法。在插件加载后立即调用。

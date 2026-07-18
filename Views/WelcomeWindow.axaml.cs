@@ -17,6 +17,7 @@ public partial class WelcomeWindow : MyWindow, INavigationPageFactory
 
     private readonly List<Type> _pages =
     [
+        typeof(SoundChoicePage),
         typeof(IntroPage),
         typeof(FeaturesPage),
         typeof(QuickSetupPage),

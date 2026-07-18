@@ -5,6 +5,26 @@
              xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="500"
              x:Class="EntertainingIsland.Views.WelcomePages.QuickSetupPage">
+    <UserControl.Styles>
+        <Style Selector="fa|SettingsExpander.card-entry">
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="RenderTransform"><TranslateTransform X="40"/></Setter>
+        </Style>
+        <Style Selector="fa|SettingsExpander.card-entry.visible">
+            <Style.Animations>
+                <Animation Duration="0:0:0.45" Easing="0.33, 0.00, 0.10, 1.00" FillMode="Both">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0"/>
+                        <Setter Property="TranslateTransform.X" Value="40"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1"/>
+                        <Setter Property="TranslateTransform.X" Value="0"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </UserControl.Styles>
     <Grid RowDefinitions="Auto, *, Auto" Margin="32,16">
         <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,16">
             <TextBlock Text="快速设置" FontSize="24" FontWeight="SemiBold" />
@@ -12,8 +32,9 @@
         </StackPanel>
 
         <ScrollViewer Grid.Row="1">
-            <StackPanel Spacing="8">
-            <fa:SettingsExpander Header="防巡堂警报"
+            <StackPanel Spacing="8" x:Name="CardsPanel">
+            <fa:SettingsExpander Classes="card-entry" x:Name="CardAlertHotkey"
+                                 Header="防巡堂警报"
                                  Description="按下热键弹出全屏提醒窗外有老师视奸。"
                                  IconSource="{x:Null}">
                 <fa:SettingsExpander.Footer>
@@ -21,7 +42,8 @@
                 </fa:SettingsExpander.Footer>
             </fa:SettingsExpander>
 
-            <fa:SettingsExpander Header="小说阅读器"
+            <fa:SettingsExpander Classes="card-entry" x:Name="CardNovelReader"
+                                 Header="小说阅读器"
                                  Description="在课表组件中阅读 txt 小说。"
                                  IconSource="{x:Null}">
                 <fa:SettingsExpander.Footer>
@@ -29,7 +51,8 @@
                 </fa:SettingsExpander.Footer>
             </fa:SettingsExpander>
 
-            <fa:SettingsExpander Header="每日运势"
+            <fa:SettingsExpander Classes="card-entry" x:Name="CardFortune"
+                                 Header="每日运势"
                                  Description="每日随机宜忌运势，高中生专属趣味指南。"
                                  IconSource="{x:Null}">
                 <fa:SettingsExpander.Footer>
@@ -37,7 +60,8 @@
                 </fa:SettingsExpander.Footer>
             </fa:SettingsExpander>
 
-            <fa:SettingsExpander Header="口头禅记录"
+            <fa:SettingsExpander Classes="card-entry" x:Name="CardCatchphrase"
+                                 Header="口头禅记录"
                                  Description="记录老师口头禅次数，支持语音识别。"
                                  IconSource="{x:Null}">
                 <fa:SettingsExpander.Footer>
@@ -45,7 +69,8 @@
                 </fa:SettingsExpander.Footer>
             </fa:SettingsExpander>
 
-            <fa:SettingsExpander Header="体育赛事"
+            <fa:SettingsExpander Classes="card-entry" x:Name="CardSports"
+                                 Header="体育赛事"
                                  Description="显示 NBA / 英超 / 西甲等实时比分。"
                                  IconSource="{x:Null}">
                 <fa:SettingsExpander.Footer>
@@ -53,7 +78,8 @@
                 </fa:SettingsExpander.Footer>
             </fa:SettingsExpander>
 
-            <fa:SettingsExpander Header="全局安全键"
+            <fa:SettingsExpander Classes="card-entry" x:Name="CardDismissKey"
+                                 Header="全局安全键"
                                  Description="老师突然出现时，立即按下全局安全键（默认 Ctrl+Shift+K），所有娱乐组件瞬间隐藏，再按一次恢复。"
                                  IconSource="{x:Null}"
                                  IsExpanded="False">
@@ -65,12 +91,8 @@
                     </StackPanel>
                     <StackPanel Spacing="4">
                         <TextBlock Text="主按键" FontSize="12" Opacity="0.7" />
-                        <ComboBox SelectedItem="{Binding DismissKeyKey}" Width="100">
-                            <ComboBoxItem Content="K" />
-                            <ComboBoxItem Content="F1" />
-                            <ComboBoxItem Content="F2" />
-                            <ComboBoxItem Content="F12" />
-                        </ComboBox>
+                        <ComboBox SelectedItem="{Binding DismissKeyKey}" Width="100"
+                                  ItemsSource="{Binding KeyOptions}" />
                     </StackPanel>
                 </StackPanel>
             </fa:SettingsExpander>

@@ -20,11 +20,9 @@
         </Style>
     </UserControl.Styles>
     <Grid x:Name="Root" Opacity="0">
-        <!-- Banner as background texture, top-aligned, full width -->
         <Image x:Name="BannerImage" Stretch="UniformToFill"
                VerticalAlignment="Top" HorizontalAlignment="Stretch"
                Opacity="0.3"/>
-        <!-- Content centered on top -->
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
             <ci:FluentIcon Glyph="&#xE425;" FontSize="48" HorizontalAlignment="Center" Foreground="{DynamicResource SystemAccentColorBrush}" />
             <TextBlock Text="一切就绪！" FontSize="28" FontWeight="SemiBold" HorizontalAlignment="Center" />

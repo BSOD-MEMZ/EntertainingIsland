@@ -68,20 +68,8 @@ public partial class IntroPage : UserControl, IWelcomePage
         Classes.Add("anim-zoom");
         var letters = LettersPanel.Children.OfType<TextBlock>().ToList();
 
-        // Start audio IMMEDIATELY via winmm (lowest latency)
-        try
-        {
-            var plugin = IAppHost.TryGetService<Plugin>();
-            if (plugin != null)
-            {
-                var audioPath = Path.Combine(plugin.Info.PluginFolderPath, "intro.wav");
-                if (File.Exists(audioPath))
-                    PlaySound(audioPath, IntPtr.Zero, SND_ASYNC | SND_FILENAME);
-            }
-        }
-        catch { }
-
-        // Wait for audio to hit 0.3s mark
+        // 音频已在 SoundChoicePage 中预热播放，此处不再重复调用
+        // 等待音频到达卡点节拍后再启动画面动画
         await Task.Delay(300);
 
         // Phase 1: Icon scale+fade in
@@ -143,6 +131,18 @@ public partial class IntroPage : UserControl, IWelcomePage
     private static extern bool PlaySound(string pszSound, IntPtr hmod, uint fdwSound);
     private const uint SND_ASYNC = 0x0001;
     private const uint SND_FILENAME = 0x00020000;
+
+    /// <summary>外部可用：异步播放 WAV 文件（audio 设备预热）</summary>
+    public static void PlaySoundStatic(string filePath)
+    {
+        PlaySound(filePath, IntPtr.Zero, SND_ASYNC | SND_FILENAME);
+    }
+
+    /// <summary>外部可用：停止当前播放的声音</summary>
+    public static void StopSoundStatic()
+    {
+        PlaySound(null, IntPtr.Zero, 0);
+    }
 
     private void ButtonNext_OnClick(object? sender, RoutedEventArgs e) => WelcomeWindow.FromControl(this)?.NavigateForward();
 }
